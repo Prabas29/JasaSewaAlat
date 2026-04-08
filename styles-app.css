@@ -1,8 +1,8 @@
 :root {
-  --blue: #2563eb;
+  --blue: #1d4ed8;
   --blue-light: #eff6ff;
   --blue-mid: #dbeafe;
-  --blue-dark: #1d4ed8;
+  --blue-dark: #1e40af;
   --green: #16a34a;
   --green-light: #dcfce7;
   --amber: #d97706;
@@ -21,9 +21,9 @@
   --sidebar-w: 240px;
   --font: 'Plus Jakarta Sans', sans-serif;
   --mono: 'DM Mono', monospace;
-  --radius: 12px;
-  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
-  --shadow-lg: 0 8px 32px rgba(37,99,235,.12);
+  --radius: 10px;
+  --shadow: 0 1px 2px rgba(16,24,40,.06), 0 6px 20px rgba(16,24,40,.05);
+  --shadow-lg: 0 14px 30px rgba(16,24,40,.1);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,13 +36,25 @@ body {
   overflow-x: hidden;
 }
 
+#auth-screen {
+  min-height: 100vh;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 12% 16%, rgba(191,219,254,.45) 0%, transparent 34%),
+    radial-gradient(circle at 88% 84%, rgba(186,230,253,.42) 0%, transparent 34%),
+    linear-gradient(135deg, #f8fafc 0%, #eff6ff 48%, #f1f5f9 100%);
+}
+
 /* ─── ROLE SELECTOR ─── */
 #role-select-screen {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #2563eb 100%);
+  background: linear-gradient(130deg, #0b1324 0%, #1e2b4f 56%, #264581 100%);
   position: relative;
   overflow: hidden;
 }
@@ -76,8 +88,8 @@ body {
   flex-wrap: wrap;
 }
 .role-card {
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
   backdrop-filter: blur(12px);
   border-radius: 20px;
   padding: 28px 24px;
@@ -87,14 +99,141 @@ body {
   color: #fff;
 }
 .role-card:hover {
-  background: rgba(255,255,255,.15);
-  border-color: rgba(255,255,255,.4);
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.28);
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(0,0,0,.3);
+  box-shadow: 0 14px 32px rgba(0,0,0,.24);
 }
-.role-icon { font-size: 2.4rem; margin-bottom: 10px; }
+.role-icon { font-size: 2.2rem; margin-bottom: 10px; }
+.role-icon i { line-height: 1; }
 .role-name { font-size: .9rem; font-weight: 700; letter-spacing: .5px; }
 .role-desc { font-size: .72rem; color: rgba(255,255,255,.55); margin-top: 4px; }
+
+/* ─── AUTH ─── */
+.auth-shell {
+  width: min(1020px, 100%);
+  min-height: 620px;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 24px 54px rgba(15,23,42,.14);
+  border: 1px solid #e2e8f0;
+  background: #fff;
+}
+.auth-hero {
+  padding: 42px;
+  background: linear-gradient(155deg, #0f172a 0%, #1f3d7a 56%, #2563eb 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.auth-logo {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -1.2px;
+}
+.auth-logo span { color: #7dd3fc; }
+.auth-hero-title {
+  font-size: 1.95rem;
+  font-weight: 800;
+  line-height: 1.22;
+  margin-top: 28px;
+}
+.auth-hero-list {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: .9rem;
+  color: rgba(255,255,255,.88);
+}
+.auth-hero-foot {
+  margin-top: auto;
+  font-size: .78rem;
+  color: rgba(255,255,255,.68);
+  padding-top: 26px;
+}
+.auth-panel {
+  padding: 34px 34px 28px;
+  display: flex;
+  flex-direction: column;
+}
+.auth-back {
+  border: none;
+  background: transparent;
+  color: var(--gray-500);
+  font-size: .78rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+}
+.auth-role {
+  margin-top: 14px;
+  display: inline-flex;
+  width: fit-content;
+  font-size: .68rem;
+  font-weight: 700;
+  color: #1e40af;
+  background: #dbeafe;
+  padding: 4px 10px;
+  border-radius: 999px;
+  letter-spacing: .3px;
+}
+.auth-title {
+  margin-top: 12px;
+  font-size: 1.42rem;
+  line-height: 1.25;
+}
+.auth-sub {
+  margin-top: 6px;
+  color: var(--gray-500);
+  font-size: .82rem;
+}
+.auth-form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.auth-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.auth-actions {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: .74rem;
+}
+.auth-link {
+  border: none;
+  background: transparent;
+  color: #1d4ed8;
+  font-weight: 600;
+  cursor: pointer;
+}
+.auth-submit {
+  margin-top: 6px;
+  width: 100%;
+  justify-content: center;
+  padding: 10px 14px;
+}
+.auth-note {
+  font-size: .7rem;
+  color: var(--gray-400);
+  line-height: 1.4;
+}
+.auth-demo {
+  margin-top: auto;
+  padding-top: 18px;
+  color: var(--gray-500);
+  font-size: .73rem;
+  line-height: 1.5;
+}
 
 /* ─── MAIN APP SHELL ─── */
 #app { display: none; min-height: 100vh; }
@@ -168,6 +307,12 @@ body {
   border-radius: 0 3px 3px 0;
 }
 .nav-icon { font-size: 1.1rem; width: 20px; text-align: center; }
+.icon-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
 .nav-badge {
   margin-left: auto;
   background: var(--red);
@@ -460,7 +605,15 @@ textarea { resize: vertical; min-height: 80px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
+  font-size: 2.1rem;
+}
+.product-thumb i,
+.booking-thumb i,
+.notif-btn i,
+.notif-icon i,
+.stat-icon i,
+.tl-dot i {
+  line-height: 1;
 }
 .product-info { padding: 12px 14px; }
 .product-name { font-size: .85rem; font-weight: 700; color: var(--gray-900); }
@@ -649,6 +802,13 @@ textarea { resize: vertical; min-height: 80px; }
   .main-content { margin-left: 0; }
   .grid-2 { grid-template-columns: 1fr; }
   .stat-grid { grid-template-columns: 1fr 1fr; }
+  #auth-screen { padding: 12px; }
+  .auth-shell { grid-template-columns: 1fr; min-height: auto; }
+  .auth-hero { padding: 24px 20px; }
+  .auth-hero-title { font-size: 1.32rem; margin-top: 16px; }
+  .auth-hero-foot { padding-top: 16px; }
+  .auth-panel { padding: 22px 18px; }
+  .auth-row { grid-template-columns: 1fr; }
 }
 
 /* ─── CATEGORY PILLS ─── */

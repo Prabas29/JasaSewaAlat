@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AlatGo — Platform Sewa Alat Terpercaya</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="styles-app.css">
 </head>
 <body>
@@ -15,21 +16,45 @@
     <div class="role-logo">Alat<span>Go</span></div>
     <div class="role-sub">Platform Sewa Alat Online Terpercaya</div>
     <div class="role-cards">
-      <div class="role-card" onclick="enterApp('admin')">
-        <div class="role-icon">⚙️</div>
+      <div class="role-card" onclick="startAuth('admin')">
+        <div class="role-icon"><i class="bi bi-shield-check"></i></div>
         <div class="role-name">Admin</div>
         <div class="role-desc">Kelola platform</div>
       </div>
-      <div class="role-card" onclick="enterApp('tenant')">
-        <div class="role-icon">👨‍💼</div>
+      <div class="role-card" onclick="startAuth('tenant')">
+        <div class="role-icon"><i class="bi bi-shop"></i></div>
         <div class="role-name">Tenant</div>
         <div class="role-desc">Sewa alat anda</div>
       </div>
-      <div class="role-card" onclick="enterApp('borrower')">
-        <div class="role-icon">👤</div>
+      <div class="role-card" onclick="startAuth('borrower')">
+        <div class="role-icon"><i class="bi bi-person-badge"></i></div>
         <div class="role-name">Peminjam</div>
         <div class="role-desc">Cari alat sewa</div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── AUTH SCREEN ─── -->
+<div id="auth-screen">
+  <div class="auth-shell">
+    <div class="auth-hero">
+      <div class="auth-logo">Alat<span>Go</span></div>
+      <div class="auth-hero-title">Satu platform untuk sewa alat yang aman, cepat, dan terverifikasi.</div>
+      <div class="auth-hero-list">
+        <div><i class="bi bi-check2-circle"></i> Verifikasi identitas dan KYC</div>
+        <div><i class="bi bi-check2-circle"></i> Escrow pembayaran dan perlindungan transaksi</div>
+        <div><i class="bi bi-check2-circle"></i> Tracking pemesanan real-time</div>
+      </div>
+      <div class="auth-hero-foot">Trusted by 3.200+ penyewa dan 850+ tenant aktif</div>
+    </div>
+    <div class="auth-panel">
+      <button class="auth-back" onclick="backToRoleSelect()"><i class="bi bi-arrow-left"></i> Kembali Pilih Peran</button>
+      <div class="auth-role" id="authRoleLabel">Login</div>
+      <h1 class="auth-title" id="authTitle">Masuk ke akun Anda</h1>
+      <p class="auth-sub" id="authSub">Gunakan akun demo atau isi data simulasi presentasi.</p>
+      <div id="authFormHost"></div>
+      <div class="auth-demo" id="authDemoHint"></div>
     </div>
   </div>
 </div>
@@ -48,7 +73,7 @@
             <div class="user-name" id="sidebarName">Admin</div>
             <div class="user-role" id="sidebarRole">admin@alatgo.id</div>
           </div>
-          <div class="logout-btn">↪️</div>
+          <div class="logout-btn"><i class="bi bi-box-arrow-right"></i></div>
         </div>
       </div>
     </div>
@@ -60,7 +85,7 @@
         <div class="topbar-right">
           <div style="position:relative;">
             <button class="notif-btn" id="notifBtn" onclick="toggleNotif(this)">
-              🔔
+              <i class="bi bi-bell"></i>
               <div class="notif-dot"></div>
             </button>
             <div class="notif-panel" id="notifPanel">
@@ -72,7 +97,7 @@
             </div>
           </div>
           <div class="search-topbar" onclick="this.querySelector('input')?.focus()">
-            🔍 <input type="text" placeholder="Cari..." style="border:none;background:transparent;outline:none;flex:1;font-size:.82rem;">
+            <i class="bi bi-search"></i> <input type="text" placeholder="Cari..." style="border:none;background:transparent;outline:none;flex:1;font-size:.82rem;">
           </div>
         </div>
       </div>
