@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AlatGo — Platform Sewa Alat Terpercaya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles-app.css">
+</head>
+<body>
+
+<!-- ─── ROLE SELECTOR SCREEN ─── -->
+<div id="role-select-screen">
+  <div class="role-box">
+    <div class="role-logo">Alat<span>Go</span></div>
+    <div class="role-sub">Platform Sewa Alat Online Terpercaya</div>
+    <div class="role-cards">
+      <div class="role-card" onclick="enterApp('admin')">
+        <div class="role-icon">⚙️</div>
+        <div class="role-name">Admin</div>
+        <div class="role-desc">Kelola platform</div>
+      </div>
+      <div class="role-card" onclick="enterApp('tenant')">
+        <div class="role-icon">👨‍💼</div>
+        <div class="role-name">Tenant</div>
+        <div class="role-desc">Sewa alat anda</div>
+      </div>
+      <div class="role-card" onclick="enterApp('borrower')">
+        <div class="role-icon">👤</div>
+        <div class="role-name">Peminjam</div>
+        <div class="role-desc">Cari alat sewa</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MAIN APP ─── -->
+<div id="app">
+  <div class="app-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-logo">Alat<span>Go</span> <span class="sidebar-badge" id="roleBadge">ADMIN</span></div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">
+        <div class="user-pill" onclick="logout()">
+          <div class="user-avatar" id="sidebarAvatar">AD</div>
+          <div>
+            <div class="user-name" id="sidebarName">Admin</div>
+            <div class="user-role" id="sidebarRole">admin@alatgo.id</div>
+          </div>
+          <div class="logout-btn">↪️</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-title" id="topbarTitle">Dashboard</div>
+        <div class="topbar-right">
+          <div style="position:relative;">
+            <button class="notif-btn" id="notifBtn" onclick="toggleNotif(this)">
+              🔔
+              <div class="notif-dot"></div>
+            </button>
+            <div class="notif-panel" id="notifPanel">
+              <div class="notif-header">
+                Notifikasi
+                <button style="background:none;border:none;cursor:pointer;color:var(--gray-400);" onclick="markAllRead()">✓ Semua</button>
+              </div>
+              <div id="notifList"></div>
+            </div>
+          </div>
+          <div class="search-topbar" onclick="this.querySelector('input')?.focus()">
+            🔍 <input type="text" placeholder="Cari..." style="border:none;background:transparent;outline:none;flex:1;font-size:.82rem;">
+          </div>
+        </div>
+      </div>
+
+      <div class="page-content" id="pageContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-close" onclick="closeModal()">✕</div>
+    </div>
+    <div id="modalBody"></div>
+    <div class="modal-footer" id="modalFooter"></div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="script-app.js"></script>
+
+</body>
+</html>

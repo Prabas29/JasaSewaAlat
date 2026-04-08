@@ -1,0 +1,1351 @@
+// ─── DATA STORE ───
+const store = {
+  users: [
+    { id: 1, name: 'Budi Santoso', email: 'budi@mail.com', role: 'borrower', status: 'active', joined: '2024-03-12', rating: 4.8, rentals: 24 },
+    { id: 2, name: 'Andi Wijaya', email: 'andi@mail.com', role: 'tenant', status: 'active', joined: '2023-11-05', rating: 4.9, items: 8 },
+    { id: 3, name: 'Sari Dewi', email: 'sari@mail.com', role: 'borrower', status: 'active', joined: '2024-05-20', rating: 4.6, rentals: 7 },
+    { id: 4, name: 'Rizky Pratama', email: 'rizky@mail.com', role: 'tenant', status: 'suspended', joined: '2024-01-10', rating: 3.9, items: 3 },
+    { id: 5, name: 'Lina Marlina', email: 'lina@mail.com', role: 'borrower', status: 'active', joined: '2024-06-01', rating: 5.0, rentals: 2 },
+  ],
+  items: [
+    { id: 1, name: 'Drone DJI Mini 3 Pro', category: 'Elektronik', price: 150000, owner: 'Andi Wijaya', ownerId: 2, status: 'available', rating: 4.9, reviews: 128, emoji: '🚁', color: '#dbeafe', desc: 'Drone ringan dengan kamera 4K HDR, obstacle sensing 3 arah, baterai 34 menit.', specs: ['4K HDR', '34 mnt', '249g', '10km'] },
+    { id: 2, name: 'Tenda Dome 4 Person', category: 'Outdoor', price: 80000, owner: 'Andi Wijaya', ownerId: 2, status: 'rented', rating: 4.7, reviews: 95, emoji: '⛺', color: '#dcfce7', desc: 'Tenda kapasitas 4 orang, waterproof, mudah dipasang dalam 10 menit.', specs: ['4 Orang', 'Waterproof', '2.3kg', '10 mnt'] },
+    { id: 3, name: 'Kamera Sony A7 IV', category: 'Elektronik', price: 200000, owner: 'Andi Wijaya', ownerId: 2, status: 'available', rating: 4.8, reviews: 210, emoji: '📷', color: '#fef9c3', desc: 'Full frame mirrorless, 33MP, video 4K 60fps, cocok untuk fotografer profesional.', specs: ['33MP', '4K 60fps', 'FF', 'Stabilizer'] },
+    { id: 4, name: 'Sepeda MTB Trek', category: 'Olahraga', price: 50000, owner: 'Rizky Pratama', ownerId: 4, status: 'available', rating: 4.6, reviews: 67, emoji: '🚵', color: '#ede9fe', desc: 'Mountain bike 29 inch, 21 speed, suspensi depan, cocok untuk medan berat.', specs: ['29 inch', '21 speed', 'Hardtail', 'Hydraulic'] },
+    { id: 5, name: 'Proyektor Epson EB', category: 'Elektronik', price: 120000, owner: 'Andi Wijaya', ownerId: 2, status: 'available', rating: 4.5, reviews: 43, emoji: '📽️', color: '#fce7f3', desc: 'Full HD 1080p, 3600 lumens, koneksi HDMI & WiFi, cocok untuk presentasi & nonton.', specs: ['Full HD', '3600 Lumen', 'WiFi', 'HDMI'] },
+    { id: 6, name: 'Generator Honda 2KVA', category: 'Industri', price: 180000, owner: 'Rizky Pratama', ownerId: 4, status: 'available', rating: 4.3, reviews: 29, emoji: '⚡', color: '#fef3c7', desc: 'Generator portable 2KVA, ekonomis bahan bakar, senyap, mudah dibawa.', specs: ['2KVA', 'Senyap', 'Portable', '4L/hari'] },
+  ],
+  bookings: [
+    { id: 'BK001', itemId: 1, item: 'Drone DJI Mini 3 Pro', emoji: '🚁', borrower: 'Budi Santoso', borrowerId: 1, tenant: 'Andi Wijaya', tenantId: 2, start: '2025-07-10', end: '2025-07-17', days: 7, total: 1127500, status: 'active', payment: 'GoPay', created: '2025-07-08' },
+    { id: 'BK002', itemId: 3, item: 'Kamera Sony A7 IV', emoji: '📷', borrower: 'Sari Dewi', borrowerId: 3, tenant: 'Andi Wijaya', tenantId: 2, start: '2025-07-03', end: '2025-07-05', days: 3, total: 600000, status: 'completed', payment: 'Transfer Bank', created: '2025-07-01' },
+    { id: 'BK003', itemId: 2, item: 'Tenda Dome 4 Person', emoji: '⛺', borrower: 'Budi Santoso', borrowerId: 1, tenant: 'Andi Wijaya', tenantId: 2, start: '2025-06-15', end: '2025-06-18', days: 3, total: 240000, status: 'completed', payment: 'GoPay', created: '2025-06-13' },
+    { id: 'BK004', itemId: 5, item: 'Proyektor Epson EB', emoji: '📽️', borrower: 'Lina Marlina', borrowerId: 5, tenant: 'Andi Wijaya', tenantId: 2, start: '2025-07-20', end: '2025-07-22', days: 2, total: 240000, status: 'pending', payment: '-', created: '2025-07-09' },
+    { id: 'BK005', itemId: 4, item: 'Sepeda MTB Trek', emoji: '🚵', borrower: 'Budi Santoso', borrowerId: 1, tenant: 'Rizky Pratama', tenantId: 4, start: '2025-06-03', end: '2025-06-05', days: 2, total: 100000, status: 'completed', payment: 'Kartu Kredit', created: '2025-06-01' },
+    { id: 'BK006', itemId: 6, item: 'Generator Honda 2KVA', emoji: '⚡', borrower: 'Sari Dewi', borrowerId: 3, tenant: 'Rizky Pratama', tenantId: 4, start: '2025-07-25', end: '2025-07-28', days: 3, total: 540000, status: 'pending', payment: '-', created: '2025-07-10' },
+  ],
+  reviews: [
+    { id: 1, itemId: 1, item: 'Drone DJI Mini', borrower: 'Budi Santoso', rating: 5, comment: 'Baterai awet, kamera jernih. Sangat puas!', date: '2025-07-08' },
+    { id: 2, itemId: 3, item: 'Kamera Sony A7', borrower: 'Sari Dewi', rating: 5, comment: 'Kualitas foto luar biasa, kondisi mulus.', date: '2025-07-06' },
+    { id: 3, itemId: 4, item: 'Sepeda MTB Trek', borrower: 'Budi Santoso', rating: 4, comment: 'Oke tapi ban agak kurang angin, overall bagus.', date: '2025-06-06' },
+  ],
+  notifications: {
+    admin: [
+      { icon: '👤', text: 'Pengguna baru Lina Marlina mendaftar sebagai Peminjam', time: '5 menit lalu', read: false },
+      { icon: '⚠️', text: 'Laporan baru: Item #4 dilaporkan rusak oleh borrower', time: '1 jam lalu', read: false },
+      { icon: '💰', text: 'Transaksi BK004 menunggu konfirmasi pembayaran', time: '2 jam lalu', read: true },
+    ],
+    tenant: [
+      { icon: '📋', text: 'Pesanan baru BK004 dari Lina Marlina untuk Proyektor', time: '2 jam lalu', read: false },
+      { icon: '✅', text: 'Pesanan BK002 selesai — pembayaran Rp 600.000 diterima', time: '1 hari lalu', read: true },
+    ],
+    borrower: [
+      { icon: '🚁', text: 'Pesanan BK001 Drone DJI sedang aktif hingga 17 Jul 2025', time: '1 hari lalu', read: false },
+      { icon: '📦', text: 'Pesanan baru BK004 menunggu konfirmasi dari tenant', time: '2 hari lalu', read: false },
+    ],
+  },
+  currentRole: null,
+};
+
+// ─── ROLE CONFIGS ───
+const roles = {
+  admin: {
+    name: 'Administrator',
+    email: 'admin@alatgo.id',
+    avatar: 'AD',
+    badge: 'ADMIN',
+    nav: [
+      { section: 'Utama', links: [
+        { id: 'dashboard', icon: '📊', label: 'Dashboard' },
+        { id: 'analytics', icon: '📈', label: 'Analitik' },
+      ]},
+      { section: 'Manajemen', links: [
+        { id: 'users', icon: '👥', label: 'Pengguna', badge: 5 },
+        { id: 'items_admin', icon: '📦', label: 'Inventori' },
+        { id: 'bookings_admin', icon: '📋', label: 'Pemesanan', badge: 2 },
+        { id: 'disputes', icon: '⚠️', label: 'Disputasi' },
+      ]},
+      { section: 'Pengaturan', links: [
+        { id: 'settings', icon: '⚙️', label: 'Pengaturan' },
+      ]},
+    ]
+  },
+  tenant: {
+    name: 'Andi Wijaya',
+    email: 'andi@mail.com',
+    avatar: 'AW',
+    badge: 'TENANT',
+    nav: [
+      { section: 'Utama', links: [
+        { id: 'dashboard', icon: '📊', label: 'Dashboard' },
+      ]},
+      { section: 'Bisnis', links: [
+        { id: 'my_items', icon: '📦', label: 'Alat Saya' },
+        { id: 'bookings_tenant', icon: '📋', label: 'Pesanan', badge: 2 },
+        { id: 'earnings', icon: '💰', label: 'Pendapatan' },
+      ]},
+      { section: 'Lainnya', links: [
+        { id: 'reviews_tenant', icon: '⭐', label: 'Ulasan' },
+        { id: 'settings', icon: '⚙️', label: 'Profil' },
+      ]},
+    ]
+  },
+  borrower: {
+    name: 'Budi Santoso',
+    email: 'budi@mail.com',
+    avatar: 'BS',
+    badge: 'PEMINJAM',
+    nav: [
+      { section: 'Utama', links: [
+        { id: 'dashboard', icon: '🏠', label: 'Beranda' },
+        { id: 'browse', icon: '🔍', label: 'Jelajah Alat' },
+      ]},
+      { section: 'Aktivitas', links: [
+        { id: 'my_bookings', icon: '📋', label: 'Pesanan Saya', badge: 1 },
+        { id: 'history', icon: '🕐', label: 'Riwayat' },
+      ]},
+      { section: 'Lainnya', links: [
+        { id: 'reviews_borrower', icon: '⭐', label: 'Ulasan Saya' },
+        { id: 'settings', icon: '⚙️', label: 'Profil' },
+      ]},
+    ]
+  },
+};
+
+// ─── STATE ───
+let currentPage = 'dashboard';
+let currentFilter = 'all';
+let activeNotifBtn = null;
+
+function enterApp(role) {
+  store.currentRole = role;
+  document.getElementById('role-select-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  setupRole(role);
+  navigate('dashboard');
+  renderNotifications();
+  showToast(`Selamat datang, ${roles[role].name}! 👋`);
+}
+
+function setupRole(role) {
+  const r = roles[role];
+  document.getElementById('roleBadge').textContent = r.badge;
+  document.getElementById('sidebarAvatar').textContent = r.avatar;
+  document.getElementById('sidebarName').textContent = r.name;
+  document.getElementById('sidebarRole').textContent = r.email;
+
+  const nav = document.getElementById('sidebarNav');
+  nav.innerHTML = r.nav.map(section => `
+    <div class="nav-section-title">${section.section}</div>
+    ${section.links.map(link => `
+      <div class="nav-link" id="nav-${link.id}" onclick="navigate('${link.id}')">
+        <span class="nav-icon">${link.icon}</span>
+        <span>${link.label}</span>
+        ${link.badge ? `<span class="nav-badge">${link.badge}</span>` : ''}
+      </div>
+    `).join('')}
+  `).join('');
+}
+
+function navigate(page) {
+  currentPage = page;
+  document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+  const navEl = document.getElementById(`nav-${page}`);
+  if (navEl) navEl.classList.add('active');
+
+  const titles = {
+    dashboard: 'Dashboard', analytics: 'Analitik Platform', users: 'Manajemen Pengguna',
+    items_admin: 'Manajemen Inventori', bookings_admin: 'Semua Pemesanan', disputes: 'Disputasi & Laporan',
+    settings: 'Pengaturan Akun', my_items: 'Alat Saya', bookings_tenant: 'Pesanan Masuk',
+    earnings: 'Pendapatan', reviews_tenant: 'Ulasan Alat', browse: 'Jelajah Alat',
+    my_bookings: 'Pesanan Saya', history: 'Riwayat Sewa', reviews_borrower: 'Ulasan Saya',
+  };
+  document.getElementById('topbarTitle').textContent = titles[page] || page;
+
+  const role = store.currentRole;
+  const content = document.getElementById('pageContent');
+
+  if (page === 'dashboard') {
+    if (role === 'admin') content.innerHTML = renderAdminDashboard();
+    else if (role === 'tenant') content.innerHTML = renderTenantDashboard();
+    else content.innerHTML = renderBorrowerDashboard();
+  } else if (page === 'users') content.innerHTML = renderUsersPage();
+  else if (page === 'items_admin') content.innerHTML = renderItemsAdminPage();
+  else if (page === 'bookings_admin') content.innerHTML = renderBookingsAdminPage();
+  else if (page === 'analytics') content.innerHTML = renderAnalyticsPage();
+  else if (page === 'disputes') content.innerHTML = renderDisputesPage();
+  else if (page === 'my_items') content.innerHTML = renderMyItemsPage();
+  else if (page === 'bookings_tenant') content.innerHTML = renderBookingsTenantPage();
+  else if (page === 'earnings') content.innerHTML = renderEarningsPage();
+  else if (page === 'reviews_tenant') content.innerHTML = renderReviewsPage();
+  else if (page === 'browse') content.innerHTML = renderBrowsePage();
+  else if (page === 'my_bookings') content.innerHTML = renderMyBookingsPage();
+  else if (page === 'history') content.innerHTML = renderHistoryPage();
+  else if (page === 'reviews_borrower') content.innerHTML = renderReviewsBorrowerPage();
+  else if (page === 'settings') content.innerHTML = renderSettingsPage();
+}
+
+// ─── FORMAT HELPERS ───
+function rupiah(n) { return 'Rp ' + n.toLocaleString('id-ID'); }
+function statusBadge(s) {
+  const map = { active: ['badge-blue', '🔵 Aktif'], completed: ['badge-green', '✅ Selesai'], pending: ['badge-amber', '⏳ Menunggu'], cancelled: ['badge-gray', '❌ Dibatalkan'], available: ['badge-green', '✔ Tersedia'], rented: ['badge-amber', '⏳ Disewa'], suspended: ['badge-red', '🚫 Ditangguhkan'] };
+  const [cls, label] = map[s] || ['badge-gray', s];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+function starRating(n) { return '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n)); }
+
+// ─── ADMIN DASHBOARD ───
+function renderAdminDashboard() {
+  const totalRevenue = store.bookings.filter(b => b.status === 'completed').reduce((a, b) => a + b.total, 0);
+  const activeBookings = store.bookings.filter(b => b.status === 'active').length;
+  const pendingBookings = store.bookings.filter(b => b.status === 'pending').length;
+  const chartBars = [420,580,390,710,650,820,760,910,1050,880,1120,1340].map((v, i) => {
+    const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    return `<div class="bar" style="height:${Math.round(v/1340*100)}%" title="${months[i]}">
+      <div class="bar-tooltip">${months[i]}: ${v}k</div></div>`;
+  }).join('');
+
+  return `
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#dbeafe;">💰</div>
+      <div>
+        <div class="stat-label">Total Pendapatan Platform</div>
+        <div class="stat-value">${rupiah(totalRevenue)}</div>
+        <div class="stat-change up">↑ 14% dari bulan lalu</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#dcfce7;">👥</div>
+      <div>
+        <div class="stat-label">Total Pengguna</div>
+        <div class="stat-value">${store.users.length}</div>
+        <div class="stat-change up">↑ 2 pengguna baru minggu ini</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#fef3c7;">📦</div>
+      <div>
+        <div class="stat-label">Total Alat Terdaftar</div>
+        <div class="stat-value">${store.items.length}</div>
+        <div class="stat-change up">↑ 3 alat baru bulan ini</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#ede9fe;">📋</div>
+      <div>
+        <div class="stat-label">Pemesanan Aktif</div>
+        <div class="stat-value">${activeBookings + pendingBookings}</div>
+        <div class="stat-change up">${pendingBookings} menunggu konfirmasi</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="gap:20px;">
+    <div class="card">
+      <div class="card-title">Pendapatan 12 Bulan</div>
+      <div class="mini-chart" style="height:120px;">${chartBars}</div>
+      <div style="display:flex;justify-content:space-between;font-size:.68rem;color:var(--gray-400);margin-top:6px;">
+        <span>Jan</span><span>Des</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Aktivitas Terkini</div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot" style="background:#dbeafe;">📋</div>
+          <div class="tl-body">
+            <div class="tl-title">Pesanan baru BK006 — Generator 2KVA</div>
+            <div class="tl-desc">Sari Dewi • Rizky Pratama • Rp 540.000</div>
+            <div class="tl-time">10 Jul 2025, 09:14</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:#dcfce7;">✅</div>
+          <div class="tl-body">
+            <div class="tl-title">Pesanan BK002 selesai — Kamera Sony A7</div>
+            <div class="tl-desc">Sari Dewi • Rp 600.000 dibayarkan</div>
+            <div class="tl-time">05 Jul 2025, 18:30</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:#fef3c7;">👤</div>
+          <div class="tl-body">
+            <div class="tl-title">Pengguna baru: Lina Marlina</div>
+            <div class="tl-desc">Registrasi sebagai Peminjam — Jakarta</div>
+            <div class="tl-time">01 Jun 2025, 10:00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div class="card-title" style="margin-bottom:0;">Pemesanan Terbaru</div>
+      <button class="btn btn-outline btn-sm" onclick="navigate('bookings_admin')">Lihat Semua</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Item</th><th>Peminjam</th><th>Tenant</th><th>Total</th><th>Status</th></tr></thead>
+        <tbody>
+          ${store.bookings.slice(0,4).map(b => `
+          <tr>
+            <td><span style="font-family:var(--mono);font-size:.75rem;color:var(--blue);">${b.id}</span></td>
+            <td><span>${b.emoji}</span> ${b.item}</td>
+            <td>${b.borrower}</td>
+            <td>${b.tenant}</td>
+            <td style="font-weight:600;">${rupiah(b.total)}</td>
+            <td>${statusBadge(b.status)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ─── TENANT DASHBOARD ───
+function renderTenantDashboard() {
+  const myItems = store.items.filter(i => i.ownerId === 2);
+  const myBookings = store.bookings.filter(b => b.tenantId === 2);
+  const totalEarned = myBookings.filter(b => b.status === 'completed').reduce((a, b) => a + b.total, 0);
+  const activeRental = myBookings.filter(b => b.status === 'active').length;
+  const pendingOrders = myBookings.filter(b => b.status === 'pending').length;
+
+  return `
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#dcfce7;">💰</div>
+      <div>
+        <div class="stat-label">Total Pendapatan</div>
+        <div class="stat-value">${rupiah(totalEarned)}</div>
+        <div class="stat-change up">↑ Dari ${myBookings.filter(b=>b.status==='completed').length} transaksi</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#dbeafe;">📦</div>
+      <div>
+        <div class="stat-label">Alat Terdaftar</div>
+        <div class="stat-value">${myItems.length}</div>
+        <div class="stat-change up">${myItems.filter(i=>i.status==='available').length} tersedia</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#fef3c7;">📋</div>
+      <div>
+        <div class="stat-label">Pesanan Aktif</div>
+        <div class="stat-value">${activeRental}</div>
+        <div class="stat-change ${pendingOrders>0?'down':'up'}">${pendingOrders} menunggu konfirmasi</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#ede9fe;">⭐</div>
+      <div>
+        <div class="stat-label">Rating Rata-rata</div>
+        <div class="stat-value">4.8</div>
+        <div class="stat-change up">Dari ${store.reviews.filter(r=>r.borrower==='Andi Wijaya'||true).length} ulasan</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="card-title" style="margin-bottom:0;">Alat Saya</div>
+        <button class="btn btn-primary btn-sm" onclick="openAddItemModal()">+ Tambah</button>
+      </div>
+      ${myItems.map(item => `
+      <div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray-100);">
+        <div style="width:44px;height:44px;border-radius:10px;background:${item.color};display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;">${item.emoji}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:.84rem;font-weight:600;color:var(--gray-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.name}</div>
+          <div style="font-size:.72rem;color:var(--gray-400);">${rupiah(item.price)}/hari</div>
+        </div>
+        ${statusBadge(item.status)}
+      </div>`).join('')}
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="card-title" style="margin-bottom:0;">Pesanan Terbaru</div>
+        <button class="btn btn-outline btn-sm" onclick="navigate('bookings_tenant')">Lihat Semua</button>
+      </div>
+      ${myBookings.slice(0,4).map(b => `
+      <div class="booking-item">
+        <div class="booking-thumb" style="background:#dbeafe;">${b.emoji}</div>
+        <div style="flex:1;min-width:0;">
+          <div class="booking-name">${b.item}</div>
+          <div class="booking-dates">${b.borrower} · ${b.start} – ${b.end}</div>
+        </div>
+        <div>
+          <div class="booking-price">${rupiah(b.total)}</div>
+          <div class="booking-status">${statusBadge(b.status)}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ─── BORROWER DASHBOARD ───
+function renderBorrowerDashboard() {
+  const myBookings = store.bookings.filter(b => b.borrowerId === 1);
+  const activeB = myBookings.find(b => b.status === 'active');
+
+  return `
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#dbeafe;">📋</div>
+      <div>
+        <div class="stat-label">Total Sewa</div>
+        <div class="stat-value">${myBookings.length}</div>
+        <div class="stat-change up">Sejak bergabung</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#dcfce7;">✅</div>
+      <div>
+        <div class="stat-label">Selesai</div>
+        <div class="stat-value">${myBookings.filter(b=>b.status==='completed').length}</div>
+        <div class="stat-change up">100% tepat waktu</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#fef3c7;">⭐</div>
+      <div>
+        <div class="stat-label">Rating Saya</div>
+        <div class="stat-value">4.8</div>
+        <div class="stat-change up">Terverifikasi ✓</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#ede9fe;">💰</div>
+      <div>
+        <div class="stat-label">Total Dihabiskan</div>
+        <div class="stat-value">${rupiah(myBookings.filter(b=>b.status==='completed').reduce((a,b)=>a+b.total,0))}</div>
+        <div class="stat-change">Dari sewa selesai</div>
+      </div>
+    </div>
+  </div>
+
+  ${activeB ? `
+  <div class="card" style="background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;margin-bottom:20px;">
+    <div style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:8px;">PESANAN AKTIF SAAT INI</div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="font-size:2.5rem;">${activeB.emoji}</div>
+      <div style="flex:1;">
+        <div style="font-size:1rem;font-weight:700;">${activeB.item}</div>
+        <div style="font-size:.78rem;color:rgba(255,255,255,.7);margin-top:2px;">Dari ${activeB.start} sampai ${activeB.end} · ${activeB.days} hari</div>
+        <div style="margin-top:8px;">
+          <div style="font-size:.68rem;color:rgba(255,255,255,.7);margin-bottom:4px;">Progress Sewa</div>
+          <div style="height:6px;background:rgba(255,255,255,.2);border-radius:20px;overflow:hidden;">
+            <div style="height:100%;background:#fff;border-radius:20px;width:40%;"></div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:1.1rem;font-weight:800;">${rupiah(activeB.total)}</div>
+        <div style="font-size:.7rem;color:rgba(255,255,255,.7);">Total Bayar</div>
+      </div>
+    </div>
+  </div>` : ''}
+
+  <div class="grid-2">
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="card-title" style="margin-bottom:0;">Alat Populer</div>
+        <button class="btn btn-primary btn-sm" onclick="navigate('browse')">Jelajah</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        ${store.items.filter(i=>i.status==='available').slice(0,3).map(item=>`
+        <div style="display:flex;gap:12px;align-items:center;cursor:pointer;" onclick="openItemDetail(${item.id})">
+          <div style="width:44px;height:44px;border-radius:10px;background:${item.color};display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;">${item.emoji}</div>
+          <div style="flex:1;">
+            <div style="font-size:.84rem;font-weight:600;">${item.name}</div>
+            <div style="font-size:.72rem;color:var(--gray-400);">${item.category} · ${rupiah(item.price)}/hari</div>
+          </div>
+          <div style="font-size:.7rem;color:var(--blue);font-weight:600;">Sewa →</div>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Riwayat Sewa</div>
+      ${myBookings.slice(0,3).map(b=>`
+      <div class="booking-item">
+        <div class="booking-thumb" style="background:#dbeafe;">${b.emoji}</div>
+        <div style="flex:1;min-width:0;">
+          <div class="booking-name">${b.item}</div>
+          <div class="booking-dates">${b.start} – ${b.end}</div>
+        </div>
+        <div>${statusBadge(b.status)}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ─── USERS PAGE ───
+function renderUsersPage() {
+  return `
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter(this,'all')">Semua</button>
+    <button class="filter-btn" onclick="setFilter(this,'borrower')">Peminjam</button>
+    <button class="filter-btn" onclick="setFilter(this,'tenant')">Tenant</button>
+    <button class="filter-btn" onclick="setFilter(this,'suspended')">Ditangguhkan</button>
+    <div class="spacer"></div>
+    <button class="btn btn-primary btn-sm" onclick="openAddUserModal()">+ Tambah Pengguna</button>
+  </div>
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Pengguna</th><th>Peran</th><th>Status</th><th>Rating</th><th>Bergabung</th><th>Aksi</th></tr></thead>
+        <tbody>
+          ${store.users.map(u => `
+          <tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div class="user-avatar" style="background:${u.role==='tenant'?'#16a34a':'#2563eb'};width:32px;height:32px;font-size:.72rem;">${u.name.split(' ').map(n=>n[0]).join('').slice(0,2)}</div>
+                <div>
+                  <div style="font-weight:600;font-size:.84rem;">${u.name}</div>
+                  <div style="font-size:.72rem;color:var(--gray-400);">${u.email}</div>
+                </div>
+              </div>
+            </td>
+            <td>${u.role==='admin'?'<span class="badge badge-blue">Admin</span>':u.role==='tenant'?'<span class="badge badge-green">Tenant</span>':'<span class="badge badge-gray">Peminjam</span>'}</td>
+            <td>${statusBadge(u.status)}</td>
+            <td><span class="stars" style="font-size:.8rem;">★</span> ${u.rating}</td>
+            <td style="font-family:var(--mono);font-size:.76rem;color:var(--gray-500);">${u.joined}</td>
+            <td>
+              <div style="display:flex;gap:6px;">
+                <button class="btn btn-outline btn-sm" onclick="openUserDetail(${u.id})">Detail</button>
+                ${u.status==='active'
+                  ? `<button class="btn btn-danger btn-sm" onclick="suspendUser(${u.id})">Tangguhkan</button>`
+                  : `<button class="btn btn-success btn-sm" onclick="activateUser(${u.id})">Aktifkan</button>`}
+              </div>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ─── ITEMS ADMIN PAGE ───
+function renderItemsAdminPage() {
+  return `
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter(this,'all')">Semua</button>
+    <button class="filter-btn" onclick="setFilter(this,'available')">Tersedia</button>
+    <button class="filter-btn" onclick="setFilter(this,'rented')">Disewa</button>
+    <div class="spacer"></div>
+  </div>
+  <div class="product-grid">
+    ${store.items.map(item => `
+    <div class="product-card" onclick="openItemDetail(${item.id})">
+      <div class="product-thumb" style="background:${item.color};">${item.emoji}</div>
+      <div class="product-info">
+        <div class="product-name">${item.name}</div>
+        <div class="product-cat">${item.category} · ${item.owner}</div>
+        <div class="product-price">${rupiah(item.price)}/hari</div>
+        <div class="product-meta">
+          <div class="product-rating"><span class="stars">★</span> ${item.rating} (${item.reviews})</div>
+          ${statusBadge(item.status)}
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ─── BOOKINGS ADMIN ───
+function renderBookingsAdminPage() {
+  return `
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter(this,'all')">Semua</button>
+    <button class="filter-btn" onclick="setFilter(this,'pending')">Menunggu</button>
+    <button class="filter-btn" onclick="setFilter(this,'active')">Aktif</button>
+    <button class="filter-btn" onclick="setFilter(this,'completed')">Selesai</button>
+  </div>
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID Booking</th><th>Item</th><th>Peminjam</th><th>Tenant</th><th>Tanggal</th><th>Total</th><th>Pembayaran</th><th>Status</th></tr></thead>
+        <tbody>
+          ${store.bookings.map(b=>`
+          <tr>
+            <td><span style="font-family:var(--mono);font-size:.75rem;color:var(--blue);">${b.id}</span></td>
+            <td><span>${b.emoji}</span> ${b.item}</td>
+            <td>${b.borrower}</td>
+            <td>${b.tenant}</td>
+            <td style="font-size:.75rem;font-family:var(--mono);">${b.start}<br><span style="color:var(--gray-400);">→ ${b.end}</span></td>
+            <td style="font-weight:700;">${rupiah(b.total)}</td>
+            <td style="font-size:.76rem;">${b.payment}</td>
+            <td>${statusBadge(b.status)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ─── ANALYTICS ───
+function renderAnalyticsPage() {
+  const chartBars2 = [580,710,650,820,760,910].map((v,i)=>{
+    const months=['Feb','Mar','Apr','Mei','Jun','Jul'];
+    return `<div class="bar" style="height:${Math.round(v/910*100)}%"><div class="bar-tooltip">${months[i]}: ${v}k</div></div>`;
+  }).join('');
+
+  return `
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Tren Sewa (6 Bulan)</div>
+      <div class="mini-chart" style="height:140px;">${chartBars2}</div>
+      <div style="display:flex;justify-content:space-between;font-size:.68rem;color:var(--gray-400);margin-top:8px;">
+        <span>Feb</span><span>Mar</span><span>Apr</span><span>Mei</span><span>Jun</span><span>Jul</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Distribusi Kategori</div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px;">
+        ${[['Elektronik',68],['Outdoor',45],['Olahraga',22],['Industri',15]].map(([cat,pct])=>`
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:.78rem;font-weight:600;margin-bottom:5px;">
+            <span>${cat}</span><span>${pct}%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;"></div></div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+  <div class="grid-3" style="margin-top:20px;">
+    <div class="card">
+      <div class="card-title">Item Terpopuler</div>
+      ${store.items.sort((a,b)=>b.reviews-a.reviews).slice(0,4).map((item,i)=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray-100);">
+        <div style="font-size:.8rem;font-weight:800;color:var(--gray-300);width:16px;">${i+1}</div>
+        <div style="font-size:1.2rem;">${item.emoji}</div>
+        <div style="flex:1;">
+          <div style="font-size:.8rem;font-weight:600;">${item.name}</div>
+          <div style="font-size:.68rem;color:var(--gray-400);">★ ${item.rating} · ${item.reviews} ulasan</div>
+        </div>
+      </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">Top Tenant</div>
+      ${store.users.filter(u=>u.role==='tenant').map((u,i)=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray-100);">
+        <div style="font-size:.8rem;font-weight:800;color:var(--gray-300);width:16px;">${i+1}</div>
+        <div class="user-avatar" style="width:28px;height:28px;font-size:.6rem;background:var(--green);">${u.name.split(' ').map(n=>n[0]).join('').slice(0,2)}</div>
+        <div style="flex:1;">
+          <div style="font-size:.8rem;font-weight:600;">${u.name}</div>
+          <div style="font-size:.68rem;color:var(--gray-400);">${u.items} alat · ★ ${u.rating}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">Statistik Platform</div>
+      ${[['Tingkat Konversi','73%'],['Avg. Durasi Sewa','4.2 hari'],['Repeat Borrower','61%'],['Avg. Rating','4.7 ★']].map(([label,val])=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray-100);">
+        <span style="font-size:.78rem;color:var(--gray-500);">${label}</span>
+        <span style="font-size:.88rem;font-weight:700;color:var(--gray-900);">${val}</span>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ─── DISPUTES ───
+function renderDisputesPage() {
+  const disputes = [
+    { id: 'DSP001', booking: 'BK005', item: 'Sepeda MTB Trek', borrower: 'Budi Santoso', issue: 'Ban kempis saat dikembalikan, klien meminta ganti rugi', status: 'open', date: '2025-06-07' },
+    { id: 'DSP002', booking: 'BK002', item: 'Kamera Sony A7', borrower: 'Sari Dewi', issue: 'Layar LCD retak, tenant mengklaim kerusakan dari penyewa', status: 'resolved', date: '2025-07-05' },
+  ];
+  return `
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Booking</th><th>Item</th><th>Peminjam</th><th>Masalah</th><th>Status</th><th>Tanggal</th><th>Aksi</th></tr></thead>
+        <tbody>
+          ${disputes.map(d=>`
+          <tr>
+            <td><span style="font-family:var(--mono);font-size:.75rem;color:var(--red);">${d.id}</span></td>
+            <td><span style="font-family:var(--mono);font-size:.75rem;color:var(--blue);">${d.booking}</span></td>
+            <td>${d.item}</td>
+            <td>${d.borrower}</td>
+            <td style="font-size:.76rem;max-width:180px;">${d.issue}</td>
+            <td>${d.status==='open'?'<span class="badge badge-red">🔴 Terbuka</span>':'<span class="badge badge-green">✅ Selesai</span>'}</td>
+            <td style="font-family:var(--mono);font-size:.74rem;">${d.date}</td>
+            <td><button class="btn btn-outline btn-sm">Tinjau</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ─── MY ITEMS (Tenant) ───
+function renderMyItemsPage() {
+  const myItems = store.items.filter(i => i.ownerId === 2);
+  return `
+  <div class="filter-bar">
+    <button class="filter-btn active">Semua (${myItems.length})</button>
+    <div class="spacer"></div>
+    <button class="btn btn-primary" onclick="openAddItemModal()">+ Tambah Alat Baru</button>
+  </div>
+  <div class="product-grid">
+    ${myItems.map(item=>`
+    <div class="product-card">
+      <div class="product-thumb" style="background:${item.color};">${item.emoji}</div>
+      <div class="product-info">
+        <div class="product-name">${item.name}</div>
+        <div class="product-cat">${item.category}</div>
+        <div class="product-price">${rupiah(item.price)}/hari</div>
+        <div class="product-rating"><span class="stars">★</span> ${item.rating} (${item.reviews} ulasan)</div>
+        <div class="product-meta" style="margin-top:8px;">
+          ${statusBadge(item.status)}
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-outline btn-sm" onclick="openEditItemModal(${item.id})">Edit</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ─── BOOKINGS TENANT ───
+function renderBookingsTenantPage() {
+  const myBookings = store.bookings.filter(b => b.tenantId === 2);
+  return `
+  <div class="tabs">
+    <div class="tab active">Semua (${myBookings.length})</div>
+    <div class="tab">Menunggu (${myBookings.filter(b=>b.status==='pending').length})</div>
+    <div class="tab">Aktif</div>
+    <div class="tab">Selesai</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    ${myBookings.map(b=>`
+    <div class="card" style="padding:16px;">
+      <div style="display:flex;gap:14px;align-items:center;">
+        <div style="width:54px;height:54px;border-radius:12px;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">${b.emoji}</div>
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:.88rem;font-weight:700;">${b.item}</span>
+            ${statusBadge(b.status)}
+          </div>
+          <div style="font-size:.76rem;color:var(--gray-500);margin-top:4px;">Peminjam: <strong>${b.borrower}</strong> · ${b.start} → ${b.end} (${b.days} hari)</div>
+          <div style="font-size:.76rem;color:var(--gray-400);margin-top:2px;">ID: <span style="font-family:var(--mono);color:var(--blue);">${b.id}</span> · Pembayaran: ${b.payment}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:1rem;font-weight:800;color:var(--blue);">${rupiah(b.total)}</div>
+          ${b.status==='pending'?`
+          <div style="display:flex;gap:6px;margin-top:8px;">
+            <button class="btn btn-success btn-sm" onclick="approveBooking('${b.id}')">✓ Terima</button>
+            <button class="btn btn-danger btn-sm" onclick="rejectBooking('${b.id}')">✕ Tolak</button>
+          </div>`:b.status==='active'?`
+          <button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="completeBooking('${b.id}')">Selesaikan</button>`:''}
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ─── EARNINGS ───
+function renderEarningsPage() {
+  const myBookings = store.bookings.filter(b => b.tenantId === 2 && b.status === 'completed');
+  const total = myBookings.reduce((a,b)=>a+b.total,0);
+  const fee = Math.round(total * 0.05);
+  const net = total - fee;
+
+  return `
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#dcfce7;">💰</div>
+      <div>
+        <div class="stat-label">Total Bruto</div>
+        <div class="stat-value">${rupiah(total)}</div>
+        <div class="stat-change up">↑ 22% bulan ini</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#fee2e2;">🏷️</div>
+      <div>
+        <div class="stat-label">Biaya Platform (5%)</div>
+        <div class="stat-value">${rupiah(fee)}</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#dbeafe;">🏦</div>
+      <div>
+        <div class="stat-label">Pendapatan Bersih</div>
+        <div class="stat-value">${rupiah(net)}</div>
+        <div class="stat-change up">Siap dicairkan</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Riwayat Transaksi</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Item</th><th>Peminjam</th><th>Tanggal</th><th>Bruto</th><th>Fee</th><th>Net</th></tr></thead>
+        <tbody>
+          ${myBookings.map(b=>`
+          <tr>
+            <td><span style="font-family:var(--mono);font-size:.75rem;color:var(--blue);">${b.id}</span></td>
+            <td>${b.emoji} ${b.item}</td>
+            <td>${b.borrower}</td>
+            <td style="font-family:var(--mono);font-size:.74rem;">${b.end}</td>
+            <td style="font-weight:600;">${rupiah(b.total)}</td>
+            <td style="color:var(--red);">${rupiah(Math.round(b.total*.05))}</td>
+            <td style="font-weight:700;color:var(--green);">${rupiah(Math.round(b.total*.95))}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ─── REVIEWS PAGE (Tenant) ───
+function renderReviewsPage() {
+  return `
+  <div class="card" style="margin-bottom:20px;">
+    <div style="display:flex;align-items:center;gap:20px;">
+      <div style="text-align:center;">
+        <div style="font-size:2.5rem;font-weight:800;color:var(--gray-900);">4.8</div>
+        <div style="font-size:1.2rem;color:#f59e0b;">★★★★★</div>
+        <div style="font-size:.72rem;color:var(--gray-400);">${store.reviews.length} ulasan</div>
+      </div>
+      <div style="flex:1;">
+        ${[5,4,3,2,1].map(star=>`
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <span style="font-size:.74rem;color:var(--gray-500);width:16px;">${star}★</span>
+          <div class="progress-bar" style="flex:1;"><div class="progress-fill" style="width:${star===5?75:star===4?20:5}%;"></div></div>
+          <span style="font-size:.7rem;color:var(--gray-400);width:28px;">${star===5?75:star===4?20:5}%</span>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    ${store.reviews.map(r=>`
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <div class="user-avatar" style="width:34px;height:34px;font-size:.72rem;">${r.borrower.split(' ').map(n=>n[0]).join('').slice(0,2)}</div>
+        <div style="flex:1;">
+          <div style="font-size:.84rem;font-weight:700;">${r.borrower}</div>
+          <div style="font-size:.7rem;color:var(--gray-400);">${r.item} · ${r.date}</div>
+        </div>
+        <div style="color:#f59e0b;font-size:.9rem;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+      </div>
+      <div style="font-size:.82rem;color:var(--gray-600);line-height:1.5;">"${r.comment}"</div>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ─── BROWSE PAGE (Borrower) ───
+function renderBrowsePage() {
+  const cats = ['Semua','Elektronik','Outdoor','Olahraga','Industri'];
+  return `
+  <div class="filter-bar">
+    ${cats.map((c,i)=>`<button class="filter-btn ${i===0?'active':''}" onclick="setFilter(this,'${c}')">${c}</button>`).join('')}
+    <div class="spacer"></div>
+    <div class="search-input-wrap" style="width:200px;">
+      <span class="search-input-icon">🔍</span>
+      <input type="text" placeholder="Cari alat..." oninput="filterProducts(this.value)" style="padding-left:36px;">
+    </div>
+  </div>
+  <div class="product-grid" id="productGrid">
+    ${store.items.map(item=>`
+    <div class="product-card" onclick="openItemDetail(${item.id})">
+      <div class="product-thumb" style="background:${item.color};">${item.emoji}</div>
+      <div class="product-info">
+        <div class="product-name">${item.name}</div>
+        <div class="product-cat">${item.category} · ${item.owner}</div>
+        <div class="product-price">${rupiah(item.price)}/hari</div>
+        <div class="product-rating"><span class="stars">★</span> ${item.rating} (${item.reviews} ulasan)</div>
+        <div class="product-meta">
+          <div class="avail-dot ${item.status}">${item.status==='available'?'Tersedia':'Disewa'}</div>
+          ${item.status==='available'?`<button class="btn btn-primary btn-sm" onclick="event.stopPropagation();openBookingModal(${item.id})">Sewa</button>`:''}
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ─── MY BOOKINGS (Borrower) ───
+function renderMyBookingsPage() {
+  const myBookings = store.bookings.filter(b => b.borrowerId === 1);
+  return `
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    ${myBookings.map(b=>`
+    <div class="card" style="padding:16px;">
+      <div style="display:flex;gap:14px;align-items:flex-start;">
+        <div style="width:54px;height:54px;border-radius:12px;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">${b.emoji}</div>
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:.9rem;font-weight:700;">${b.item}</span>
+            ${statusBadge(b.status)}
+          </div>
+          <div style="font-size:.76rem;color:var(--gray-500);margin-top:4px;">Tenant: ${b.tenant} · ${b.days} hari</div>
+          <div style="font-size:.76rem;color:var(--gray-400);margin-top:2px;">${b.start} → ${b.end}</div>
+          <div style="font-size:.76rem;color:var(--gray-400);margin-top:2px;">Pembayaran: ${b.payment} · <span style="font-family:var(--mono);color:var(--blue);">${b.id}</span></div>
+          ${b.status==='active'?`
+          <div style="margin-top:10px;">
+            <div style="font-size:.68rem;color:var(--gray-400);margin-bottom:4px;">Progress Sewa</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:40%;"></div></div>
+          </div>`:''}
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:1rem;font-weight:800;color:var(--blue);">${rupiah(b.total)}</div>
+          ${b.status==='completed'?`<button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="openReviewModal(${b.itemId},'${b.item}')">Beri Ulasan</button>`:''}
+          ${b.status==='pending'?`<button class="btn btn-danger btn-sm" style="margin-top:8px;" onclick="cancelBooking('${b.id}')">Batalkan</button>`:''}
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ─── HISTORY PAGE (Borrower) ───
+function renderHistoryPage() {
+  const myBookings = store.bookings.filter(b => b.borrowerId === 1 && b.status === 'completed');
+  return `
+  <div class="card">
+    <div class="card-title">Riwayat Sewa Selesai</div>
+    ${myBookings.length ? myBookings.map(b=>`
+    <div class="booking-item">
+      <div class="booking-thumb" style="background:#dbeafe;">${b.emoji}</div>
+      <div style="flex:1;">
+        <div class="booking-name">${b.item}</div>
+        <div class="booking-dates">${b.start} – ${b.end} · ${b.days} hari</div>
+        <div style="font-size:.7rem;color:var(--gray-400);">${b.tenant}</div>
+      </div>
+      <div>
+        <div class="booking-price">${rupiah(b.total)}</div>
+        <div style="font-size:.7rem;color:var(--green);text-align:right;margin-top:2px;">✅ Selesai</div>
+      </div>
+    </div>`).join('') : `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">Belum ada riwayat sewa</div></div>`}
+  </div>`;
+}
+
+// ─── REVIEWS BORROWER ───
+function renderReviewsBorrowerPage() {
+  const myReviews = store.reviews.filter(r => r.borrower === 'Budi Santoso');
+  return `
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    ${myReviews.length ? myReviews.map(r=>`
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <div style="font-size:1.6rem;">${store.items.find(i=>i.id===r.itemId)?.emoji||'📦'}</div>
+        <div style="flex:1;">
+          <div style="font-size:.86rem;font-weight:700;">${r.item}</div>
+          <div style="font-size:.7rem;color:var(--gray-400);">${r.date}</div>
+        </div>
+        <div style="color:#f59e0b;font-size:.9rem;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+      </div>
+      <div style="font-size:.82rem;color:var(--gray-600);line-height:1.5;">"${r.comment}"</div>
+    </div>`).join('') : `<div class="card"><div class="empty-state"><div class="empty-icon">⭐</div><div class="empty-text">Belum ada ulasan</div></div></div>`}
+    <button class="btn btn-primary" style="align-self:flex-start;" onclick="navigate('my_bookings')">+ Beri Ulasan Baru</button>
+  </div>`;
+}
+
+// ─── SETTINGS PAGE ───
+function renderSettingsPage() {
+  const role = store.currentRole;
+  const r = roles[role];
+  return `
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Informasi Akun</div>
+      <div style="display:flex;flex-direction:column;align-items:center;padding:20px 0 24px;">
+        <div class="user-avatar" style="width:60px;height:60px;font-size:1.2rem;margin-bottom:10px;">${r.avatar}</div>
+        <div style="font-size:1rem;font-weight:700;">${r.name}</div>
+        <div style="font-size:.78rem;color:var(--gray-400);margin-top:2px;">${r.email}</div>
+        <span class="badge badge-blue" style="margin-top:8px;">${r.badge}</span>
+      </div>
+      <div class="form-group">
+        <label>Nama Lengkap</label>
+        <input type="text" value="${r.name}">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" value="${r.email}">
+      </div>
+      <div class="form-group">
+        <label>Nomor Telepon</label>
+        <input type="text" value="+62 812-3456-7890">
+      </div>
+      <button class="btn btn-primary" onclick="showToast('Profil berhasil diperbarui! ✅','success')">Simpan Perubahan</button>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">Keamanan</div>
+        <div class="form-group">
+          <label>Password Baru</label>
+          <input type="text" placeholder="Minimal 8 karakter">
+        </div>
+        <div class="form-group">
+          <label>Konfirmasi Password</label>
+          <input type="text" placeholder="Ulangi password">
+        </div>
+        <button class="btn btn-outline" onclick="showToast('Password berhasil diubah! 🔐','success')">Ubah Password</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Preferensi Notifikasi</div>
+        ${['Pesanan Baru','Konfirmasi Pembayaran','Pengingat Pengembalian','Update Platform'].map(n=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray-100);">
+          <span style="font-size:.84rem;">${n}</span>
+          <div style="width:40px;height:22px;background:var(--blue);border-radius:20px;position:relative;cursor:pointer;">
+            <div style="position:absolute;right:3px;top:3px;width:16px;height:16px;background:#fff;border-radius:50%;"></div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── MODALS ───
+function openModal(title, body, footer='') {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = body;
+  document.getElementById('modalFooter').innerHTML = footer;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function openAddItemModal() {
+  openModal('Tambah Alat Baru', `
+    <div class="form-group"><label>Nama Alat</label><input type="text" placeholder="Misal: Drone DJI Mini 3 Pro" id="mi_name"></div>
+    <div class="form-group"><label>Kategori</label>
+      <select id="mi_cat"><option>Elektronik</option><option>Outdoor</option><option>Olahraga</option><option>Industri</option></select>
+    </div>
+    <div class="form-group"><label>Harga per Hari (Rp)</label><input type="number" placeholder="150000" id="mi_price"></div>
+    <div class="form-group"><label>Deskripsi</label><textarea placeholder="Deskripsi alat..." id="mi_desc"></textarea></div>
+    <div class="form-group"><label>Emoji / Ikon</label><input type="text" placeholder="🚁" id="mi_emoji" maxlength="2"></div>
+  `,`
+    <button class="btn btn-outline" onclick="closeModal()">Batal</button>
+    <button class="btn btn-primary" onclick="submitAddItem()">Tambah Alat</button>
+  `);
+}
+
+function submitAddItem() {
+  const name = document.getElementById('mi_name').value;
+  const cat = document.getElementById('mi_cat').value;
+  const price = parseInt(document.getElementById('mi_price').value) || 100000;
+  const desc = document.getElementById('mi_desc').value;
+  const emoji = document.getElementById('mi_emoji').value || '📦';
+  if (!name) { showToast('Nama alat wajib diisi!', 'error'); return; }
+  const colors = ['#dbeafe','#dcfce7','#fef9c3','#ede9fe','#fce7f3'];
+  store.items.push({ id: store.items.length+1, name, category: cat, price, owner: 'Andi Wijaya', ownerId: 2, status: 'available', rating: 5.0, reviews: 0, emoji, color: colors[Math.floor(Math.random()*colors.length)], desc, specs: [] });
+  closeModal();
+  showToast(`${name} berhasil ditambahkan! ✅`, 'success');
+  navigate(currentPage);
+}
+
+function openEditItemModal(id) {
+  const item = store.items.find(i => i.id === id);
+  openModal(`Edit: ${item.name}`, `
+    <div class="form-group"><label>Nama Alat</label><input type="text" value="${item.name}" id="ei_name"></div>
+    <div class="form-group"><label>Harga per Hari (Rp)</label><input type="number" value="${item.price}" id="ei_price"></div>
+    <div class="form-group"><label>Status</label>
+      <select id="ei_status">
+        <option value="available" ${item.status==='available'?'selected':''}>Tersedia</option>
+        <option value="rented" ${item.status==='rented'?'selected':''}>Disewa</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Deskripsi</label><textarea id="ei_desc">${item.desc}</textarea></div>
+  `, `
+    <button class="btn btn-danger btn-sm" onclick="deleteItem(${id})">Hapus Alat</button>
+    <div style="flex:1;"></div>
+    <button class="btn btn-outline" onclick="closeModal()">Batal</button>
+    <button class="btn btn-primary" onclick="saveEditItem(${id})">Simpan</button>
+  `);
+}
+
+function saveEditItem(id) {
+  const item = store.items.find(i => i.id === id);
+  item.name = document.getElementById('ei_name').value;
+  item.price = parseInt(document.getElementById('ei_price').value);
+  item.status = document.getElementById('ei_status').value;
+  item.desc = document.getElementById('ei_desc').value;
+  closeModal();
+  showToast('Alat berhasil diperbarui! ✅', 'success');
+  navigate(currentPage);
+}
+
+function deleteItem(id) {
+  const idx = store.items.findIndex(i => i.id === id);
+  store.items.splice(idx, 1);
+  closeModal();
+  showToast('Alat dihapus.', 'error');
+  navigate(currentPage);
+}
+
+function openAddUserModal() {
+  openModal('Tambah Pengguna', `
+    <div class="form-group"><label>Nama Lengkap</label><input type="text" id="au_name" placeholder="Nama lengkap"></div>
+    <div class="form-group"><label>Email</label><input type="email" id="au_email" placeholder="email@domain.com"></div>
+    <div class="form-group"><label>Peran</label>
+      <select id="au_role"><option value="borrower">Peminjam</option><option value="tenant">Tenant</option></select>
+    </div>
+  `, `
+    <button class="btn btn-outline" onclick="closeModal()">Batal</button>
+    <button class="btn btn-primary" onclick="submitAddUser()">Tambah</button>
+  `);
+}
+
+function submitAddUser() {
+  const name = document.getElementById('au_name').value;
+  const email = document.getElementById('au_email').value;
+  const role = document.getElementById('au_role').value;
+  if (!name || !email) { showToast('Nama dan email wajib diisi!', 'error'); return; }
+  store.users.push({ id: store.users.length+1, name, email, role, status: 'active', joined: new Date().toISOString().slice(0,10), rating: 5.0, rentals: 0, items: 0 });
+  closeModal();
+  showToast(`Pengguna ${name} berhasil ditambahkan! ✅`, 'success');
+  navigate(currentPage);
+}
+
+function openUserDetail(id) {
+  const u = store.users.find(u => u.id === id);
+  openModal(`Detail: ${u.name}`, `
+    <div style="display:flex;flex-direction:column;align-items:center;padding:10px 0 20px;">
+      <div class="user-avatar" style="width:60px;height:60px;font-size:1.2rem;margin-bottom:10px;">${u.name.split(' ').map(n=>n[0]).join('').slice(0,2)}</div>
+      <div style="font-size:1rem;font-weight:700;">${u.name}</div>
+      <div style="font-size:.78rem;color:var(--gray-400);">${u.email}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      ${[['Peran',u.role],['Status',u.status],['Bergabung',u.joined],['Rating',u.rating+'★']].map(([k,v])=>`
+      <div style="background:var(--gray-50);border-radius:8px;padding:10px 12px;">
+        <div style="font-size:.68rem;color:var(--gray-400);margin-bottom:2px;">${k}</div>
+        <div style="font-size:.84rem;font-weight:600;">${v}</div>
+      </div>`).join('')}
+    </div>
+  `, `<button class="btn btn-outline" onclick="closeModal()">Tutup</button>`);
+}
+
+function openItemDetail(id) {
+  const item = store.items.find(i => i.id === id);
+  const role = store.currentRole;
+  openModal(item.name, `
+    <div style="height:120px;background:${item.color};border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;margin-bottom:16px;">${item.emoji}</div>
+    <div>
+      <span class="cat-pill">${item.category}</span>
+    </div>
+    <div style="font-size:.78rem;color:var(--gray-500);margin-top:4px;">Pemilik: ${item.owner}</div>
+    <div style="font-size:1.4rem;font-weight:800;color:var(--blue);margin:10px 0 4px;">${rupiah(item.price)}<span style="font-size:.8rem;color:var(--gray-400);font-weight:400;"> / hari</span></div>
+    <div style="color:#f59e0b;font-size:.9rem;margin-bottom:10px;">${'★'.repeat(Math.round(item.rating))} <span style="font-size:.76rem;color:var(--gray-400);">${item.rating} (${item.reviews} ulasan)</span></div>
+    <p style="font-size:.82rem;color:var(--gray-600);line-height:1.6;">${item.desc}</p>
+    ${item.specs.length ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">${item.specs.map(s=>`<span style="background:var(--gray-100);padding:4px 10px;border-radius:8px;font-size:.72rem;font-weight:600;">${s}</span>`).join('')}</div>` : ''}
+  `, `
+    <button class="btn btn-outline" onclick="closeModal()">Tutup</button>
+    ${role==='borrower' && item.status==='available' ? `<button class="btn btn-primary" onclick="closeModal();openBookingModal(${item.id})">🗓 Pesan Sekarang</button>` : ''}
+  `);
+}
+
+function openBookingModal(id) {
+  const item = store.items.find(i => i.id === id);
+  const today = new Date().toISOString().slice(0,10);
+  const tomorrow = new Date(Date.now()+86400000).toISOString().slice(0,10);
+  openModal(`Pesan: ${item.name}`, `
+    <div style="display:flex;gap:12px;align-items:center;background:var(--gray-50);border-radius:10px;padding:12px;margin-bottom:16px;">
+      <div style="width:48px;height:48px;border-radius:10px;background:${item.color};display:flex;align-items:center;justify-content:center;font-size:1.6rem;">${item.emoji}</div>
+      <div>
+        <div style="font-weight:700;">${item.name}</div>
+        <div style="font-size:.76rem;color:var(--blue);">${rupiah(item.price)}/hari</div>
+      </div>
+    </div>
+    <div class="form-group"><label>Tanggal Mulai</label><input type="date" id="bk_start" value="${today}" min="${today}" onchange="calcBookingTotal()"></div>
+    <div class="form-group"><label>Tanggal Selesai</label><input type="date" id="bk_end" value="${tomorrow}" min="${tomorrow}" onchange="calcBookingTotal()"></div>
+    <div class="form-group"><label>Metode Pembayaran</label>
+      <select id="bk_pay"><option>GoPay</option><option>Transfer Bank</option><option>Kartu Kredit / Debit</option></select>
+    </div>
+    <div style="background:var(--blue-light);border-radius:10px;padding:14px;" id="bk_summary">
+      <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:6px;"><span>Biaya sewa</span><span id="bk_rent">Rp 150.000</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:6px;"><span>Biaya layanan (5%)</span><span id="bk_fee">Rp 7.500</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:6px;"><span>Asuransi</span><span>Rp 25.000</span></div>
+      <hr style="border:none;border-top:1px solid var(--blue-mid);margin:8px 0;">
+      <div style="display:flex;justify-content:space-between;font-size:.9rem;font-weight:700;"><span>Total</span><span style="color:var(--blue);" id="bk_total">Rp 182.500</span></div>
+    </div>
+  `, `
+    <button class="btn btn-outline" onclick="closeModal()">Batal</button>
+    <button class="btn btn-primary" onclick="submitBooking(${item.id},'${item.name}','${item.emoji}')">Konfirmasi & Bayar</button>
+  `);
+  window._bookingItemPrice = item.price;
+}
+
+function calcBookingTotal() {
+  const start = new Date(document.getElementById('bk_start').value);
+  const end = new Date(document.getElementById('bk_end').value);
+  const days = Math.max(1, Math.round((end - start) / 86400000));
+  const price = window._bookingItemPrice || 150000;
+  const rent = price * days;
+  const fee = Math.round(rent * 0.05);
+  const ins = 25000;
+  const total = rent + fee + ins;
+  document.getElementById('bk_rent').textContent = rupiah(rent) + ` (${days} hari)`;
+  document.getElementById('bk_fee').textContent = rupiah(fee);
+  document.getElementById('bk_total').textContent = rupiah(total);
+}
+
+function submitBooking(itemId, itemName, emoji) {
+  const start = document.getElementById('bk_start').value;
+  const end = document.getElementById('bk_end').value;
+  const pay = document.getElementById('bk_pay').value;
+  if (!start || !end || start >= end) { showToast('Pilih tanggal yang valid!', 'error'); return; }
+  const days = Math.round((new Date(end) - new Date(start)) / 86400000);
+  const price = window._bookingItemPrice || 150000;
+  const total = price * days + Math.round(price * days * 0.05) + 25000;
+  const id = 'BK' + String(store.bookings.length + 1).padStart(3,'0');
+  store.bookings.push({ id, itemId, item: itemName, emoji, borrower: 'Budi Santoso', borrowerId: 1, tenant: 'Andi Wijaya', tenantId: 2, start, end, days, total, status: 'pending', payment: pay, created: new Date().toISOString().slice(0,10) });
+  closeModal();
+  showToast(`Pesanan ${id} berhasil dibuat! 🎉`, 'success');
+  navigate('my_bookings');
+}
+
+function openReviewModal(itemId, itemName) {
+  openModal(`Ulasan: ${itemName}`, `
+    <div class="form-group">
+      <label>Rating</label>
+      <div style="display:flex;gap:8px;font-size:1.5rem;cursor:pointer;" id="starSelect">
+        ${[1,2,3,4,5].map(s=>`<span onclick="setStarRating(${s})" id="star${s}" style="color:var(--gray-200);">★</span>`).join('')}
+      </div>
+      <input type="hidden" id="rv_rating" value="0">
+    </div>
+    <div class="form-group"><label>Komentar</label><textarea id="rv_comment" placeholder="Ceritakan pengalaman sewa Anda..."></textarea></div>
+  `, `
+    <button class="btn btn-outline" onclick="closeModal()">Batal</button>
+    <button class="btn btn-primary" onclick="submitReview(${itemId},'${itemName}')">Kirim Ulasan</button>
+  `);
+}
+
+function setStarRating(n) {
+  document.getElementById('rv_rating').value = n;
+  [1,2,3,4,5].forEach(s => {
+    document.getElementById(`star${s}`).style.color = s <= n ? '#f59e0b' : 'var(--gray-200)';
+  });
+}
+
+function submitReview(itemId, itemName) {
+  const rating = parseInt(document.getElementById('rv_rating').value);
+  const comment = document.getElementById('rv_comment').value;
+  if (!rating) { showToast('Pilih rating dulu!', 'error'); return; }
+  if (!comment) { showToast('Komentar wajib diisi!', 'error'); return; }
+  store.reviews.push({ id: store.reviews.length+1, itemId, item: itemName, borrower: 'Budi Santoso', rating, comment, date: new Date().toISOString().slice(0,10) });
+  closeModal();
+  showToast('Ulasan berhasil dikirim! ⭐', 'success');
+}
+
+// ─── BOOKING ACTIONS (Tenant) ───
+function approveBooking(id) {
+  const b = store.bookings.find(b => b.id === id);
+  b.status = 'active';
+  b.payment = 'GoPay';
+  showToast(`Pesanan ${id} diterima! ✅`, 'success');
+  navigate(currentPage);
+}
+
+function rejectBooking(id) {
+  const b = store.bookings.find(b => b.id === id);
+  b.status = 'cancelled';
+  showToast(`Pesanan ${id} ditolak.`, 'error');
+  navigate(currentPage);
+}
+
+function completeBooking(id) {
+  const b = store.bookings.find(b => b.id === id);
+  const item = store.items.find(i => i.id === b.itemId);
+  b.status = 'completed';
+  if (item) item.status = 'available';
+  showToast(`Pesanan ${id} selesai! Pembayaran diterima ✅`, 'success');
+  navigate(currentPage);
+}
+
+function cancelBooking(id) {
+  const b = store.bookings.find(b => b.id === id);
+  b.status = 'cancelled';
+  showToast(`Pesanan ${id} dibatalkan.`, 'error');
+  navigate(currentPage);
+}
+
+// ─── USER ACTIONS ───
+function suspendUser(id) {
+  store.users.find(u => u.id === id).status = 'suspended';
+  showToast('Pengguna ditangguhkan.', 'error');
+  navigate(currentPage);
+}
+function activateUser(id) {
+  store.users.find(u => u.id === id).status = 'active';
+  showToast('Pengguna diaktifkan! ✅', 'success');
+  navigate(currentPage);
+}
+
+// ─── NOTIFICATIONS ───
+function renderNotifications() {
+  const role = store.currentRole;
+  const notifs = store.notifications[role] || [];
+  const list = document.getElementById('notifList');
+  list.innerHTML = notifs.map(n=>`
+    <div class="notif-item ${n.read?'':'notif-unread'}">
+      <div class="notif-icon">${n.icon}</div>
+      <div>
+        <div class="notif-text">${n.text}</div>
+        <div class="notif-time">${n.time}</div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleNotif(btn) {
+  const panel = document.getElementById('notifPanel');
+  if (activeNotifBtn && activeNotifBtn !== btn) {
+    document.getElementById('notifPanel').classList.remove('open');
+  }
+  panel.classList.toggle('open');
+  activeNotifBtn = btn;
+}
+
+function markAllRead() {
+  const role = store.currentRole;
+  (store.notifications[role]||[]).forEach(n => n.read = true);
+  renderNotifications();
+  document.querySelector('.notif-dot').style.display = 'none';
+}
+
+// Close notif on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('.notif-btn')) {
+    document.getElementById('notifPanel')?.classList.remove('open');
+  }
+});
+document.addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+
+// ─── FILTER / SEARCH ───
+function setFilter(btn, val) {
+  btn.closest('.filter-bar').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = val;
+}
+
+function filterProducts(q) {
+  const grid = document.getElementById('productGrid');
+  if (!grid) return;
+  const cards = grid.querySelectorAll('.product-card');
+  cards.forEach(c => {
+    const name = c.querySelector('.product-name')?.textContent.toLowerCase() || '';
+    c.style.display = name.includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+
+// ─── TOAST ───
+function showToast(msg, type='') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<span>${type==='success'?'✅':type==='error'?'❌':'💬'}</span> ${msg}`;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3500);
+}
+
+// ─── LOGOUT ───
+function logout() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('role-select-screen').style.display = 'flex';
+  store.currentRole = null;
+}
