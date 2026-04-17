@@ -781,6 +781,20 @@ textarea { resize: vertical; min-height: 80px; }
   to { transform: translateX(0); opacity: 1; }
 }
 
+/* ─── CHAT FEATURE ─── */
+.chat-list-item {
+  padding: 12px;
+  border-bottom: 1px solid var(--gray-100);
+  cursor: pointer;
+  transition: background .15s;
+}
+.chat-list-item:hover {
+  background: var(--blue-light);
+}
+.chat-list-item:last-child {
+  border-bottom: none;
+}
+
 /* ─── EMPTY STATE ─── */
 .empty-state {
   text-align: center;

@@ -1,10 +1,10 @@
 const store = {
   users: [
-    { id: 1, name: 'Budi Santoso', email: 'budi@mail.com', role: 'borrower', status: 'active', joined: '2024-03-12', rating: 4.8, rentals: 24, verified: true },
-    { id: 2, name: 'Andi Wijaya', email: 'andi@mail.com', role: 'tenant', status: 'active', joined: '2023-11-05', rating: 4.9, items: 8, verified: true },
-    { id: 3, name: 'Sari Dewi', email: 'sari@mail.com', role: 'borrower', status: 'active', joined: '2024-05-20', rating: 4.6, rentals: 7, verified: true },
-    { id: 4, name: 'Rizky Pratama', email: 'rizky@mail.com', role: 'tenant', status: 'suspended', joined: '2024-01-10', rating: 3.9, items: 3, verified: false },
-    { id: 5, name: 'Lina Marlina', email: 'lina@mail.com', role: 'borrower', status: 'active', joined: '2024-06-01', rating: 5.0, rentals: 2, verified: false }
+    { id: 1, name: 'Budi Santoso', email: 'budi@mail.com', role: 'borrower', status: 'active', joined: '2024-03-12', rating: 4.8, rentals: 24, verified: true, isAdmin: false },
+    { id: 2, name: 'Andi Wijaya', email: 'andi@mail.com', role: 'tenant', status: 'active', joined: '2023-11-05', rating: 4.9, items: 8, verified: true, isAdmin: false },
+    { id: 3, name: 'Sari Dewi', email: 'sari@mail.com', role: 'borrower', status: 'active', joined: '2024-05-20', rating: 4.6, rentals: 7, verified: true, isAdmin: false },
+    { id: 4, name: 'Rizky Pratama', email: 'rizky@mail.com', role: 'tenant', status: 'suspended', joined: '2024-01-10', rating: 3.9, items: 3, verified: false, isAdmin: false },
+    { id: 5, name: 'Lina Marlina', email: 'lina@mail.com', role: 'borrower', status: 'active', joined: '2024-06-01', rating: 5.0, rentals: 2, verified: false, isAdmin: false }
   ],
   items: [
     { id: 1, name: 'Drone DJI Mini 3 Pro', category: 'Elektronik', price: 150000, owner: 'Andi Wijaya', ownerId: 2, status: 'available', rating: 4.9, reviews: 128, emoji: 'bi bi-drone', color: '#dbeafe', desc: 'Drone ringan dengan kamera 4K HDR, obstacle sensing 3 arah, baterai 34 menit.', specs: ['4K HDR', '34 mnt', '249g', '10km'] },
@@ -58,6 +58,21 @@ const store = {
     { id: 1, peer: 'Andi Wijaya', role: 'tenant', last: 'Boleh pickup jam 8 pagi.', unread: 1 },
     { id: 2, peer: 'Customer Support', role: 'support', last: 'Tiket refund sedang diproses.', unread: 0 }
   ],
+  chats: [
+    { id: 'CH001', user1Id: 1, user1Name: 'Budi Santoso', user1Role: 'borrower', user2Id: 2, user2Name: 'Andi Wijaya', user2Role: 'tenant', lastMsg: 'Baik, terima kasih!', lastTime: '2026-04-17 14:30', messages: [
+      { sender: 1, text: 'Halo, saya tertarik menyewa drone anda', time: '14:15' },
+      { sender: 2, text: 'Halo Budi! Kami ready. Kapan mau pickup?', time: '14:20' },
+      { sender: 1, text: 'Besok pagi jam 8 bisa?', time: '14:25' },
+      { sender: 2, text: 'Baik, nanti kami siapkan. Pembayaran via apa?', time: '14:28' },
+      { sender: 1, text: 'Baik, terima kasih!', time: '14:30' }
+    ]},
+    { id: 'CH002', user1Id: 3, user1Name: 'Sari Dewi', user1Role: 'borrower', user2Id: 4, user2Name: 'Rizky Pratama', user2Role: 'tenant', lastMsg: 'Siap, terus hubungi saya', lastTime: '2026-04-16 10:45', messages: [
+      { sender: 3, text: 'Generator anda masih available?', time: '10:30' },
+      { sender: 4, text: 'Masih tersedia untuk akhir pekan', time: '10:35' },
+      { sender: 3, text: 'Berapa harga untuk 3 hari?', time: '10:40' },
+      { sender: 4, text: 'Siap, terus hubungi saya', time: '10:45' }
+    ]}
+  ],
   wishlist: [1, 3, 5],
   notifications: {
     admin: [
@@ -97,7 +112,11 @@ const roles = {
         { id: 'disputes', icon: 'bi bi-exclamation-triangle', label: 'Disputes' },
         { id: 'kyc', icon: 'bi bi-patch-check', label: 'KYC Verification' },
         { id: 'payouts_admin', icon: 'bi bi-cash-coin', label: 'Payout Approval' },
-        { id: 'support_admin', icon: 'bi bi-headset', label: 'Support Queue' }
+        { id: 'support_admin', icon: 'bi bi-headset', label: 'Support Queue' },
+        { id: 'admin_management', icon: 'bi bi-shield-lock', label: 'Admin Management' }
+      ]},
+      { section: 'Komunikasi', links: [
+        { id: 'chat_admin', icon: 'bi bi-chat-dots', label: 'Chat Pengguna' }
       ]},
       { section: 'Sistem', links: [
         { id: 'system_logs', icon: 'bi bi-cpu', label: 'System Logs' },
@@ -123,6 +142,7 @@ const roles = {
       ]},
       { section: 'Lainnya', links: [
         { id: 'reviews_tenant', icon: 'bi bi-star', label: 'Reviews' },
+        { id: 'chat_tenant', icon: 'bi bi-chat-dots', label: 'Messages', badge: 1 },
         { id: 'support_tenant', icon: 'bi bi-ticket-perforated', label: 'Support Tickets' },
         { id: 'settings', icon: 'bi bi-gear', label: 'Profile' }
       ]}
@@ -143,7 +163,7 @@ const roles = {
         { id: 'my_bookings', icon: 'bi bi-receipt', label: 'My Orders', badge: 1 },
         { id: 'history', icon: 'bi bi-clock-history', label: 'History' },
         { id: 'wallet', icon: 'bi bi-credit-card', label: 'Wallet & Billing' },
-        { id: 'messages', icon: 'bi bi-chat-dots', label: 'Messages' }
+        { id: 'chat_borrower', icon: 'bi bi-chat-dots', label: 'Messages' }
       ]},
       { section: 'Lainnya', links: [
         { id: 'reviews_borrower', icon: 'bi bi-star', label: 'My Reviews' },
@@ -177,7 +197,97 @@ let currentFilter = 'all';
 let activeNotifBtn = null;
 let authState = { role: null, mode: 'login', pendingIdentity: '' };
 
+// Socket.io connection for real-time chat
+let socket = null;
+const SOCKET_URL = 'http://localhost:3000';
+
+function initializeSocket() {
+  if (typeof io === 'undefined') {
+    console.warn('❌ Socket.io not loaded. Chat will work in demo mode.');
+    showToast('Socket.io not loaded - check console', 'error');
+    return;
+  }
+  
+  socket = io(SOCKET_URL, {
+    reconnection: true,
+    reconnectionDelay: 1000,
+    reconnectionDelayMax: 5000,
+    reconnectionAttempts: 5,
+    forceNew: true
+  });
+
+  socket.on('connect', () => {
+    console.log('✅ Connected to chat server at', SOCKET_URL);
+    showToast('Connected to chat server! 🎉', 'success');
+    if (store.currentUser) {
+      socket.emit('userJoin', {
+        userId: getCurrentUserId(),
+        name: store.currentUser.name,
+        role: store.currentRole,
+        email: store.currentUser.email
+      });
+      console.log('📝 User joined:', store.currentUser.name);
+    }
+  });
+
+  socket.on('disconnect', () => {
+    console.log('❌ Disconnected from chat server');
+    showToast('Disconnected from server', 'error');
+  });
+
+  socket.on('receiveMessage', (message) => {
+    console.log('📨 New message received:', message);
+  });
+
+  socket.on('error', (err) => {
+    console.error('Socket error:', err);
+  });
+
+  socket.on('connect_error', (err) => {
+    console.error('Connection error:', err);
+    console.warn('⚠️ Make sure server is running: npm start');
+  });
+
+  socket.on('loadMessages', (messages) => {
+    console.log('📬 Messages loaded from server:', messages.length);
+  });
+
+  socket.on('chatsList', (chats) => {
+    console.log('📋 Chats list received:', chats.length);
+  });
+}
+
+// Test function - call from browser console: testChat()
+function testChat() {
+  console.log('=== Chat System Test ===');
+  console.log('Socket status:', socket ? (socket.connected ? '✅ Connected' : '❌ Disconnected') : '❌ Not initialized');
+  console.log('Current user:', store.currentUser?.name);
+  console.log('Current role:', store.currentRole);
+  console.log('Chats available:', store.chats.length);
+  if (socket) {
+    console.log('Socket ID:', socket.id);
+    console.log('Socket URL:', SOCKET_URL);
+  }
+  return {
+    connected: socket?.connected || false,
+    user: store.currentUser?.name,
+    chats: store.chats.length
+  };
+}
+
 function rupiah(n) { return 'Rp ' + Number(n || 0).toLocaleString('id-ID'); }
+function getCurrentUserId() {
+  return Number(store.currentUser?.id) || 0;
+}
+function getCurrentUserName() {
+  return store.currentUser?.name || 'User';
+}
+function getAvatarFromName(name) {
+  const words = String(name || '').trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return 'US';
+  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+  return `${words[0][0]}${words[1][0]}`.toUpperCase();
+}
 function prettyRole(role) {
   if (role === 'admin') return 'Admin';
   if (role === 'tenant') return 'Tenant';
@@ -282,6 +392,13 @@ function renderAuth() {
           <input type="email" id="regEmail" required placeholder="nama@email.com">
         </div>
         <div class="form-group">
+          <label>Daftar Sebagai</label>
+          <select id="regRole">
+            <option value="tenant" ${authState.role === 'tenant' ? 'selected' : ''}>Tenant</option>
+            <option value="borrower" ${authState.role === 'borrower' ? 'selected' : ''}>Peminjam</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label>Nomor Telepon</label>
           <input type="text" id="regPhone" required placeholder="08xxxxxxxxxx">
         </div>
@@ -341,7 +458,8 @@ function renderAuth() {
 
 function submitLogin(event) {
   event.preventDefault();
-  enterApp(authState.role);
+  const email = document.getElementById('authEmail')?.value.trim().toLowerCase();
+  enterApp(authState.role, email);
 }
 
 function submitRegister(event) {
@@ -361,18 +479,20 @@ function submitRegister(event) {
     return;
   }
   const name = `${first} ${last}`.trim();
+  const selectedRole = document.getElementById('regRole')?.value || authState.role;
   store.users.push({
     id: store.users.length + 1,
     name,
     email,
-    role: authState.role,
+    role: selectedRole,
     status: 'active',
     joined: new Date().toISOString().slice(0, 10),
     rating: 5,
-    rentals: 0,
-    items: 0,
+    rentals: selectedRole === 'borrower' ? 0 : undefined,
+    items: selectedRole === 'tenant' ? 0 : undefined,
     verified: false,
-    phone
+    phone,
+    isAdmin: false
   });
   showToast('Akun berhasil dibuat. Lanjut login.', 'success');
   changeAuthMode('login');
@@ -402,24 +522,42 @@ function submitOtp(event) {
   changeAuthMode('login');
 }
 
-function enterApp(role) {
+function enterApp(role, loginEmail = '') {
+  let selectedUser = null;
+  if (role === 'admin') {
+    selectedUser = store.users.find(u => u.isAdmin && u.email.toLowerCase() === loginEmail);
+    if (!selectedUser && loginEmail === authConfig.admin.creds.email.toLowerCase()) {
+      selectedUser = { id: 0, name: roles.admin.name, email: roles.admin.email, role: 'admin', isAdmin: true };
+    }
+  } else {
+    selectedUser = store.users.find(u => u.role === role && u.email.toLowerCase() === loginEmail);
+  }
+
+  if (!selectedUser) {
+    showToast('Akun tidak ditemukan untuk peran ini.', 'error');
+    return;
+  }
+
   store.currentRole = role;
-  store.currentUser = roles[role];
+  store.currentUser = selectedUser;
   document.getElementById('role-select-screen').style.display = 'none';
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   setupRole(role);
   navigate('dashboard');
   renderNotifications();
-  showToast(`Selamat datang, ${roles[role].name}!`, 'success');
+  showToast(`Selamat datang, ${store.currentUser.name}!`, 'success');
+  
+  // Initialize Socket.io connection
+  initializeSocket();
 }
 
 function setupRole(role) {
   const r = roles[role];
   document.getElementById('roleBadge').textContent = r.badge;
-  document.getElementById('sidebarAvatar').textContent = r.avatar;
-  document.getElementById('sidebarName').textContent = r.name;
-  document.getElementById('sidebarRole').textContent = r.email;
+  document.getElementById('sidebarAvatar').textContent = getAvatarFromName(store.currentUser?.name || r.name);
+  document.getElementById('sidebarName').textContent = store.currentUser?.name || r.name;
+  document.getElementById('sidebarRole').textContent = store.currentUser?.email || r.email;
 
   const nav = document.getElementById('sidebarNav');
   nav.innerHTML = r.nav.map(section => `
@@ -443,12 +581,11 @@ function navigate(page) {
   const titles = {
     dashboard: 'Dashboard', analytics: 'Analytics Platform', reports: 'Monthly Reports',
     users: 'Manajemen Pengguna', items_admin: 'Manajemen Inventori', bookings_admin: 'Semua Booking',
-    disputes: 'Disputes & Claims', kyc: 'KYC Verification', payouts_admin: 'Payout Approval', support_admin: 'Support Queue',
-    system_logs: 'System Logs', settings: 'Pengaturan Akun',
+    disputes: 'Disputes & Claims', kyc: 'KYC Verification', payouts_admin: 'Payout Approval', support_admin: 'Support Queue', admin_management: 'Admin Management', chat_admin: 'Chat Pengguna',
     my_items: 'Listings Saya', bookings_tenant: 'Orders Masuk', earnings: 'Pendapatan',
-    calendar_tenant: 'Availability Calendar', payouts_tenant: 'Akun Payout', reviews_tenant: 'Ulasan Tenant', support_tenant: 'Support Tickets',
+    calendar_tenant: 'Availability Calendar', payouts_tenant: 'Akun Payout', reviews_tenant: 'Ulasan Tenant', chat_tenant: 'Pesan', support_tenant: 'Support Tickets',
     browse: 'Jelajah Alat', wishlist: 'Wishlist', my_bookings: 'Pesanan Saya', history: 'Riwayat',
-    wallet: 'Wallet & Billing', messages: 'Pesan', reviews_borrower: 'Ulasan Saya', help_center: 'Help Center'
+    wallet: 'Wallet & Billing', chat_borrower: 'Pesan', reviews_borrower: 'Ulasan Saya', help_center: 'Help Center'
   };
   document.getElementById('topbarTitle').textContent = titles[page] || page;
 
@@ -471,21 +608,23 @@ function navigate(page) {
     kyc: renderKycPage,
     payouts_admin: renderPayoutsAdminPage,
     support_admin: renderSupportAdminPage,
+    admin_management: renderAdminManagementPage,
+    chat_admin: renderChatAdminPage,
     reports: renderReportsPage,
-    system_logs: renderSystemLogsPage,
     my_items: renderMyItemsPage,
     bookings_tenant: renderBookingsTenantPage,
     earnings: renderEarningsPage,
     calendar_tenant: renderTenantCalendarPage,
     payouts_tenant: renderPayoutTenantPage,
     reviews_tenant: renderReviewsPage,
+    chat_tenant: renderChatTenantPage,
     support_tenant: renderSupportTenantPage,
     browse: renderBrowsePage,
     wishlist: renderWishlistPage,
     my_bookings: renderMyBookingsPage,
     history: renderHistoryPage,
     wallet: renderWalletPage,
-    messages: renderMessagesPage,
+    chat_borrower: renderChatBorrowerPage,
     reviews_borrower: renderReviewsBorrowerPage,
     help_center: renderHelpCenterPage,
     settings: renderSettingsPage
@@ -1326,4 +1465,468 @@ function logout() {
   document.getElementById('role-select-screen').style.display = 'flex';
   showToast('Anda berhasil logout.');
 }
+
+// ─── CHAT FEATURE ───
+function renderChatTenantPage() {
+  const currentUserId = getCurrentUserId();
+  const relevantChats = store.chats.filter(c => c.user1Id === currentUserId || c.user2Id === currentUserId);
+  return `
+    <div class="grid-2" style="gap:20px;">
+      <div class="card" style="height:600px;display:flex;flex-direction:column;">
+        <div class="card-title">Percakapan</div>
+        <div style="flex:1;overflow-y:auto;border-bottom:1px solid var(--gray-100);">
+          ${relevantChats.map(c => `
+            <div class="chat-list-item" onclick="openChatDetail('${c.id}')">
+              <div style="flex:1;">
+                <div style="font-size:.84rem;font-weight:700;">${c.user1Id === currentUserId ? c.user2Name : c.user1Name}</div>
+                <div style="font-size:.74rem;color:var(--gray-500);">${prettyRole(c.user1Id === currentUserId ? c.user2Role : c.user1Role)}</div>
+                <div style="font-size:.72rem;color:var(--gray-400);margin-top:4px;">${c.lastMsg}</div>
+              </div>
+              <div style="text-align:right;font-size:.72rem;color:var(--gray-400);">${c.lastTime}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div style="padding:12px;border-top:1px solid var(--gray-100);"><button class="btn btn-primary btn-sm" style="width:100%;" onclick="openNewChatTenant()">+ Chat Baru</button></div>
+      </div>
+      <div class="card" style="height:600px;display:flex;flex-direction:column;" id="chatDetailPanel">
+        <div style="padding:20px;text-align:center;color:var(--gray-400);">Pilih chat untuk memulai percakapan</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderChatBorrowerPage() {
+  const currentUserId = getCurrentUserId();
+  const relevantChats = store.chats.filter(c => c.user1Id === currentUserId || c.user2Id === currentUserId);
+  return `
+    <div class="grid-2" style="gap:20px;">
+      <div class="card" style="height:600px;display:flex;flex-direction:column;">
+        <div class="card-title">Percakapan</div>
+        <div style="flex:1;overflow-y:auto;border-bottom:1px solid var(--gray-100);">
+          ${relevantChats.map(c => `
+            <div class="chat-list-item" onclick="openChatDetail('${c.id}')">
+              <div style="flex:1;">
+                <div style="font-size:.84rem;font-weight:700;">${c.user1Id === currentUserId ? c.user2Name : c.user1Name}</div>
+                <div style="font-size:.74rem;color:var(--gray-500);">${prettyRole(c.user1Id === currentUserId ? c.user2Role : c.user1Role)}</div>
+                <div style="font-size:.72rem;color:var(--gray-400);margin-top:4px;">${c.lastMsg}</div>
+              </div>
+              <div style="text-align:right;font-size:.72rem;color:var(--gray-400);">${c.lastTime}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div style="padding:12px;border-top:1px solid var(--gray-100);"><button class="btn btn-primary btn-sm" style="width:100%;" onclick="openNewChatBorrower()">+ Chat Baru</button></div>
+      </div>
+      <div class="card" style="height:600px;display:flex;flex-direction:column;" id="chatDetailPanel">
+        <div style="padding:20px;text-align:center;color:var(--gray-400);">Pilih chat untuk memulai percakapan</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderChatAdminPage() {
+  const currentUserId = getCurrentUserId();
+  const relevantChats = store.chats.filter(c => c.user1Id === currentUserId || c.user2Id === currentUserId);
+  return `
+    <div class="grid-2" style="gap:20px;">
+      <div class="card" style="height:600px;display:flex;flex-direction:column;">
+        <div class="card-title">Chat Tenant & Peminjam</div>
+        <div style="flex:1;overflow-y:auto;border-bottom:1px solid var(--gray-100);">
+          ${relevantChats.map(c => `
+            <div class="chat-list-item" onclick="openChatDetail('${c.id}')">
+              <div style="flex:1;">
+                <div style="font-size:.84rem;font-weight:700;">${c.user1Id === currentUserId ? c.user2Name : c.user1Name}</div>
+                <div style="font-size:.74rem;color:var(--gray-500);">${prettyRole(c.user1Id === currentUserId ? c.user2Role : c.user1Role)}</div>
+                <div style="font-size:.72rem;color:var(--gray-400);margin-top:4px;">${c.lastMsg}</div>
+              </div>
+              <div style="text-align:right;font-size:.72rem;color:var(--gray-400);">${c.lastTime}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div style="padding:12px;border-top:1px solid var(--gray-100);"><button class="btn btn-primary btn-sm" style="width:100%;" onclick="openNewChatAdmin()">+ Chat Baru</button></div>
+      </div>
+      <div class="card" style="height:600px;display:flex;flex-direction:column;" id="chatDetailPanel">
+        <div style="padding:20px;text-align:center;color:var(--gray-400);">Pilih chat untuk memulai percakapan</div>
+      </div>
+    </div>
+  `;
+}
+
+function openChatDetail(chatId) {
+  const chat = store.chats.find(c => c.id === chatId);
+  if (!chat) return;
+  
+  const panel = document.getElementById('chatDetailPanel');
+  const currentUserId = getCurrentUserId();
+  
+  // Join Socket.io room for this chat
+  if (socket && socket.connected) {
+    socket.emit('joinChat', {
+      chatId: chat.id,
+      user1Id: chat.user1Id,
+      user2Id: chat.user2Id
+    });
+    console.log('✅ Joined chat room:', chatId);
+  }
+  
+  panel.innerHTML = `
+    <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;" id="messagesContainer">
+      ${chat.messages.map(m => `
+        <div style="display:flex;${m.sender === currentUserId ? 'justify-content:flex-end' : ''};">
+          <div style="background:${m.sender === currentUserId ? 'var(--blue)' : 'var(--gray-100)'};color:${m.sender === currentUserId ? '#fff' : 'var(--gray-900)'};padding:10px 14px;border-radius:10px;max-width:70%;font-size:.82rem;word-wrap:break-word;">
+            ${m.text}
+            <div style="font-size:.7rem;margin-top:4px;opacity:0.7;">${m.time}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="padding:12px;border-top:1px solid var(--gray-100);display:flex;gap:8px;">
+      <input type="text" id="chatInput" placeholder="Ketik pesan..." style="flex:1;border:1px solid var(--gray-200);border-radius:8px;padding:10px;" onkeypress='if(event.key==="Enter") sendChatMessage(${JSON.stringify(chatId)})'>
+      <button class="btn btn-primary btn-sm" onclick='sendChatMessage(${JSON.stringify(chatId)})'>Kirim</button>
+    </div>
+  `;
+  
+  // Listen for incoming messages
+  if (socket && socket.connected) {
+    socket.off('receiveMessage'); // Remove old listeners
+    socket.on('receiveMessage', (message) => {
+      console.log('📨 Message received:', message);
+      
+      // Add message to store
+      const currentChat = store.chats.find(c => c.id === chatId);
+      if (currentChat && message.sender !== currentUserId) {
+        currentChat.messages.push({
+          sender: message.sender,
+          text: message.text,
+          time: message.time
+        });
+        
+        // Re-render messages
+        const container = document.getElementById('messagesContainer');
+        if (container) {
+          const newMsg = document.createElement('div');
+          newMsg.style.display = 'flex';
+          newMsg.innerHTML = `
+            <div style="background:var(--gray-100);color:var(--gray-900);padding:10px 14px;border-radius:10px;max-width:70%;font-size:.82rem;word-wrap:break-word;">
+              ${message.text}
+              <div style="font-size:.7rem;margin-top:4px;opacity:0.7;">${message.time}</div>
+            </div>
+          `;
+          container.appendChild(newMsg);
+          container.scrollTop = container.scrollHeight;
+        }
+      }
+    });
+  }
+  
+  // Scroll to bottom
+  setTimeout(() => {
+    const container = document.getElementById('messagesContainer');
+    if (container) container.scrollTop = container.scrollHeight;
+  }, 0);
+}
+
+function sendChatMessage(chatId) {
+  const input = document.getElementById('chatInput');
+  const msg = input?.value.trim();
+  if (!msg) {
+    showToast('Ketik pesan terlebih dahulu.', 'error');
+    return;
+  }
+  
+  const chat = store.chats.find(c => c.id === chatId);
+  if (!chat) return;
+  
+  const currentUserId = getCurrentUserId();
+  const now = new Date();
+  const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  
+  const messageData = {
+    chatId: chat.id,
+    user1Id: chat.user1Id,
+    user2Id: chat.user2Id,
+    senderId: currentUserId,
+    senderName: getCurrentUserName(),
+    text: msg,
+    timestamp: time
+  };
+  
+  // Send via Socket.io if connected
+  if (socket && socket.connected) {
+    socket.emit('sendMessage', messageData);
+    console.log('📤 Message sent via Socket.io:', msg);
+  } else {
+    console.log('⚠️ Socket not connected, saving locally only');
+  }
+  
+  // Update local store and display immediately
+  chat.messages.push({ sender: currentUserId, text: msg, time });
+  chat.lastMsg = msg;
+  chat.lastTime = now.toISOString().slice(0, 10) + ' ' + time;
+  
+  // Display message immediately in UI
+  const container = document.getElementById('messagesContainer');
+  if (container) {
+    const newMsg = document.createElement('div');
+    newMsg.style.display = 'flex';
+    newMsg.style.justifyContent = 'flex-end';
+    newMsg.innerHTML = `
+      <div style="background:var(--blue);color:#fff;padding:10px 14px;border-radius:10px;max-width:70%;font-size:.82rem;word-wrap:break-word;">
+        ${msg}
+        <div style="font-size:.7rem;margin-top:4px;opacity:0.7;">${time}</div>
+      </div>
+    `;
+    container.appendChild(newMsg);
+    container.scrollTop = container.scrollHeight;
+  }
+  
+  input.value = '';
+  showToast('Pesan terkirim.', 'success');
+}
+
+function openNewChatTenant() {
+  const currentUserId = getCurrentUserId();
+  const borrowers = store.users.filter(u => u.role === 'borrower' && !store.chats.some(c => (c.user1Id === u.id && c.user2Id === currentUserId) || (c.user2Id === u.id && c.user1Id === currentUserId)));
+  openModal('Mulai Chat Baru', `
+    <div class="form-group">
+      <label>Pilih Peminjam</label>
+      <select id="newChatUser">
+        <option value="">-- Pilih Peminjam --</option>
+        ${borrowers.map(b => `<option value="${b.id}">${b.name}</option>`).join('')}
+      </select>
+    </div>
+  `, `<button class="btn btn-outline" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="createNewChat('tenant')">Mulai Chat</button>`);
+}
+
+function openNewChatBorrower() {
+  const currentUserId = getCurrentUserId();
+  const tenants = store.users.filter(u => u.role === 'tenant' && !store.chats.some(c => (c.user1Id === currentUserId && c.user2Id === u.id) || (c.user2Id === currentUserId && c.user1Id === u.id)));
+  openModal('Mulai Chat Baru', `
+    <div class="form-group">
+      <label>Pilih Penyewa/Tenant</label>
+      <select id="newChatUser">
+        <option value="">-- Pilih Tenant --</option>
+        ${tenants.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
+      </select>
+    </div>
+  `, `<button class="btn btn-outline" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="createNewChat('borrower')">Mulai Chat</button>`);
+}
+
+function openNewChatAdmin() {
+  const currentUserId = getCurrentUserId();
+  const users = store.users.filter(u => ['tenant', 'borrower'].includes(u.role) && !store.chats.some(c => (c.user1Id === currentUserId && c.user2Id === u.id) || (c.user2Id === currentUserId && c.user1Id === u.id)));
+  openModal('Mulai Chat Baru', `
+    <div class="form-group">
+      <label>Pilih Pengguna</label>
+      <select id="newChatUser">
+        <option value="">-- Pilih Pengguna --</option>
+        ${users.map(u => `<option value="${u.id}">${u.name} (${prettyRole(u.role)})</option>`).join('')}
+      </select>
+    </div>
+  `, `<button class="btn btn-outline" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="createNewChat('admin')">Mulai Chat</button>`);
+}
+
+function createNewChat(role) {
+  const userId = parseInt(document.getElementById('newChatUser').value, 10);
+  if (!userId) {
+    showToast('Pilih pengguna terlebih dahulu.', 'error');
+    return;
+  }
+  
+  const otherUser = store.users.find(u => u.id === userId);
+  if (!otherUser) return;
+  
+  const newChatId = Math.max(...store.chats.map(c => parseInt(c.id.slice(2), 10)), 0) + 1;
+  
+  const currentUserId = getCurrentUserId();
+  const currentName = getCurrentUserName();
+  if (role === 'tenant') {
+    store.chats.push({
+      id: `CH${String(newChatId).padStart(3, '0')}`,
+      user1Id: userId,
+      user1Name: otherUser.name,
+      user1Role: 'borrower',
+      user2Id: currentUserId,
+      user2Name: currentName,
+      user2Role: 'tenant',
+      lastMsg: 'Chat dimulai',
+      lastTime: new Date().toISOString(),
+      messages: []
+    });
+  } else if (role === 'borrower') {
+    store.chats.push({
+      id: `CH${String(newChatId).padStart(3, '0')}`,
+      user1Id: currentUserId,
+      user1Name: currentName,
+      user1Role: 'borrower',
+      user2Id: userId,
+      user2Name: otherUser.name,
+      user2Role: 'tenant',
+      lastMsg: 'Chat dimulai',
+      lastTime: new Date().toISOString(),
+      messages: []
+    });
+  } else {
+    store.chats.push({
+      id: `CH${String(newChatId).padStart(3, '0')}`,
+      user1Id: currentUserId,
+      user1Name: currentName,
+      user1Role: 'admin',
+      user2Id: userId,
+      user2Name: otherUser.name,
+      user2Role: otherUser.role,
+      lastMsg: 'Chat dimulai',
+      lastTime: new Date().toISOString(),
+      messages: []
+    });
+  }
+  
+  closeModal();
+  showToast('Chat baru dimulai.', 'success');
+  if (store.currentRole === 'tenant') navigate('chat_tenant');
+  else if (store.currentRole === 'borrower') navigate('chat_borrower');
+  else navigate('chat_admin');
+}
+
+// ─── ADMIN MANAGEMENT ───
+function renderAdminManagementPage() {
+  const admins = store.users.filter(u => u.isAdmin);
+  const nonAdmins = store.users.filter(u => !u.isAdmin);
+  return `
+    <div class="grid-2" style="gap:20px;">
+      <div class="card">
+        <div class="card-title">Admin Saat Ini (${admins.length})</div>
+        ${admins.length === 0 ? '<div class="empty-state"><div class="empty-text">Belum ada admin lain</div></div>' : `
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            ${admins.map(u => `
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--gray-100);border-radius:10px;">
+                <div>
+                  <div style="font-size:.85rem;font-weight:700;">${u.name}</div>
+                  <div style="font-size:.72rem;color:var(--gray-500);">${u.email}</div>
+                </div>
+                <button class="btn btn-danger btn-sm" onclick="removeAdminRole(${u.id})">Hapus Admin</button>
+              </div>
+            `).join('')}
+          </div>
+        `}
+      </div>
+      <div class="card">
+        <div class="card-title">Jadikan Admin (${nonAdmins.length})</div>
+        ${nonAdmins.length === 0 ? '<div class="empty-state"><div class="empty-text">Semua pengguna sudah admin</div></div>' : `
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            ${nonAdmins.map(u => `
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--gray-100);border-radius:10px;">
+                <div>
+                  <div style="font-size:.85rem;font-weight:700;">${u.name}</div>
+                  <div style="font-size:.72rem;color:var(--gray-500);">${u.email} • ${prettyRole(u.role)}</div>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="makeAdmin(${u.id})">Jadikan Admin</button>
+              </div>
+            `).join('')}
+          </div>
+        `}
+      </div>
+    </div>
+  `;
+}
+
+function makeAdmin(userId) {
+  const user = store.users.find(u => u.id === userId);
+  if (!user) return;
+  user.isAdmin = true;
+  showToast(`${user.name} sekarang admin.`, 'success');
+  navigate('admin_management');
+}
+
+function removeAdminRole(userId) {
+  const user = store.users.find(u => u.id === userId);
+  if (!user) return;
+  if (user.email.toLowerCase() === authConfig.admin.creds.email.toLowerCase()) {
+    showToast('Tidak bisa menghapus role admin utama.', 'error');
+    return;
+  }
+  user.isAdmin = false;
+  showToast(`${user.name} tidak lagi menjadi admin.`, 'success');
+  navigate('admin_management');
+}
+
+// ─── ADDITIONAL RENDER FUNCTIONS (stubs for missing pages) ───
+function renderSettingsPage() {
+  return `
+    <div class="card">
+      <div class="card-title">Pengaturan Akun</div>
+      <div class="form-group"><label>Nama</label><input type="text" value="${store.currentUser?.name || 'User'}"></div>
+      <div class="form-group"><label>Email</label><input type="text" value="${store.currentUser?.email || 'user@mail.com'}" disabled></div>
+      <button class="btn btn-primary" onclick="showToast('Pengaturan disimpan', 'success')">Simpan Perubahan</button>
+    </div>
+  `;
+}
+
+function renderMessagesPage() {
+  return renderChatBorrowerPage();
+}
+
+function renderMyBookingsPage() {
+  const myBookings = store.bookings.filter(b => b.borrowerId === 1);
+  return `<div style="display:flex;flex-direction:column;gap:12px;">${myBookings.map(b => `<div class="card"><div style="display:flex;gap:12px;align-items:center;"><div style="font-size:1.1rem;"><i class="${b.emoji}"></i></div><div style="flex:1;"><strong>${b.item}</strong><div style="font-size:.74rem;color:var(--gray-500);">${b.tenant} • ${b.start} - ${b.end}</div></div><div>${statusBadge(b.status)}</div>${['pending', 'active'].includes(b.status) ? `<button class="btn btn-danger btn-sm" onclick="cancelBooking('${b.id}')">Batalkan</button>` : ''}</div></div>`).join('')}</div>`;
+}
+
+function renderHistoryPage() {
+  const completed = store.bookings.filter(b => b.borrowerId === 1 && ['completed', 'cancelled'].includes(b.status));
+  return `<div style="display:flex;flex-direction:column;gap:12px;">${completed.map(b => `<div class="card"><div style="display:flex;gap:12px;align-items:center;"><div style="font-size:1.1rem;"><i class="${b.emoji}"></i></div><div style="flex:1;"><strong>${b.item}</strong><div style="font-size:.74rem;color:var(--gray-500);">${b.tenant} • ${b.start} - ${b.end}</div></div><div>${statusBadge(b.status)}</div></div></div>`).join('')}</div>`;
+}
+
+function renderWalletPage() {
+  const trans = store.wallet.borrower;
+  const balance = walletBalance();
+  return `
+    <div class="grid-2" style="gap:20px;">
+      <div class="card">
+        <div style="background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;padding:20px;border-radius:12px;margin-bottom:16px;">
+          <div style="font-size:.8rem;color:rgba(255,255,255,.7);">SALDO WALLET</div>
+          <div style="font-size:1.8rem;font-weight:800;margin-top:6px;">${rupiah(balance)}</div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;margin-bottom:10px;" onclick="topUpWallet()">+ Top Up</button>
+        <button class="btn btn-outline" style="width:100%;" onclick="showToast('Lihat cara penggunaan', 'info')">Bantuan</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Transaksi</div>
+        ${trans.map(t => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray-100);">
+            <div>
+              <div style="font-size:.82rem;font-weight:700;">${t.label}</div>
+              <div style="font-size:.72rem;color:var(--gray-500);">${t.date}</div>
+            </div>
+            <div style="color:${t.type === 'credit' ? 'var(--green)' : 'var(--red)'};">
+              ${t.type === 'credit' ? '+' : '-'} ${rupiah(t.amount)}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function walletBalance() {
+  const trans = store.wallet.borrower;
+  const balance = trans.reduce((sum, t) => sum + (t.type === 'credit' ? t.amount : -t.amount), 2500000);
+  return Math.max(0, balance);
+}
+
+function renderReviewsBorrowerPage() {
+  return `<div style="display:flex;flex-direction:column;gap:12px;">${store.reviews.filter(r => r.borrower === 'Budi Santoso').map(r => `<div class="card"><div style="display:flex;justify-content:space-between;"><strong>${r.item}</strong><span style="color:#f59e0b;">${'★'.repeat(r.rating)}</span></div><div style="font-size:.75rem;color:var(--gray-500);">${r.date}</div><p style="margin-top:8px;font-size:.82rem;color:var(--gray-700);">${r.comment}</p></div>`).join('')}</div>`;
+}
+
+function renderHelpCenterPage() {
+  return `
+    <div class="card">
+      <div class="card-title">Hubungi Kami</div>
+      <div style="margin-top:20px;">
+        <div class="form-group"><label>Subjek Pertanyaan</label><input type="text" id="helpSubject" placeholder="Contoh: Bagaimana cara mencari alat?"></div>
+        <div class="form-group"><label>Deskripsi</label><textarea id="helpDesc" placeholder="Jelaskan pertanyaan atau masalah anda..."></textarea></div>
+        <button class="btn btn-primary" onclick="submitHelpTicket()">Kirim Pertanyaan</button>
+      </div>
+    </div>
+  `;
+}
+
 
